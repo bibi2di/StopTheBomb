@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Ez ukitu ezer</string>
+    <string name="playButton">Jokatu</string>
+    <string name="historial">Historiala</string>
+    <string name="conf">Ezarpenak</string>
+    <string name="tutorial">Argibideak</string>
+
+
+
+</resources>

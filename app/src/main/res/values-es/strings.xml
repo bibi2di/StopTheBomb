@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">No toques nadad</string>
+    <string name="playButton">Jugar</string>
+    <string name="historial">Historial</string>
+    <string name="conf">Configuración</string>
+    <string name="tutorial">Tutorial</string>
+
+
+</resources>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#2C3E50"
+    android:padding="16dp"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:textColor="#ECF0F1"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="32dp"/>
+
+        <Button
+            android:id="@+id/btnPlay"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:text="@string/playButton"
+            android:backgroundTint="#3498DB"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="16dp"/>
+
+        <Button
+            android:id="@+id/btnWinnerBoard"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:text="@string/historial"
+            android:backgroundTint="#2ECC71"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="16dp"/>
+
+        <Button
+            android:id="@+id/btnSettings"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:text="@string/conf"
+            android:backgroundTint="#F39C12"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="16dp"/>
+
+        <Button
+            android:id="@+id/btnTutorial"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:text="@string/tutorial"
+            android:backgroundTint="#9B59B6"
+            android:textColor="#FFFFFF"/>
+
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">"Don't touch anything"</string>
+    <string name="playButton">Play</string>
+    <string name="historial">Winner Board</string>
+    <string name="conf">Settings</string>
+    <string name="tutorial">Tutorial</string>
+
+</resources>

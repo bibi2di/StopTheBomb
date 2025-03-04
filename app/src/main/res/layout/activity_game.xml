@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#2C3E50"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/tvScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Score: 0"
+        android:textColor="#ECF0F1"
+        android:textSize="18sp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:padding="8dp"/>
+
+    <TextView
+        android:id="@+id/tvGameInstruction"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="DON'T TOUCH ANYTHING!"
+        android:textColor="#E74C3C"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_centerVertical="true"/>
+
+    <ImageView
+        android:id="@+id/ivGamePanel"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+
+        android:layout_centerInParent="true"
+        android:background="#34495E"
+        android:padding="16dp"/>
+
+    <Button
+        android:id="@+id/btnBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Back"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:backgroundTint="#E74C3C"/>
+
+</RelativeLayout>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#2C3E50"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Game Settings"
+        android:textColor="#ECF0F1"
+        android:textSize="24sp"
+        android:gravity="center"
+        android:layout_marginBottom="16dp"/>
+
+    <Switch
+        android:id="@+id/switchSounds"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Sound Effects"
+        android:textColor="#ECF0F1"
+        android:layout_marginBottom="16dp"/>
+
+    <Switch
+        android:id="@+id/switchVibration"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Vibration"
+        android:textColor="#ECF0F1"
+        android:layout_marginBottom="16dp"/>
+
+    <Button
+        android:id="@+id/btnSaveSettings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Save Settings"
+        android:backgroundTint="#3498DB"
+        android:layout_marginTop="16dp"/>
+
+    <Button
+        android:id="@+id/btnBackToMain"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Back to Main Menu"
+        android:backgroundTint="#E74C3C"
+        android:layout_marginTop="16dp"/>
+
+</LinearLayout>
