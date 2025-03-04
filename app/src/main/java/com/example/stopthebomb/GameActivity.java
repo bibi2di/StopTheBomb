@@ -1,6 +1,7 @@
 package com.example.stopthebomb;
 
 import android.os.Bundle;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.os.Handler;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -22,6 +24,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.LogRecord;
 import java.util.stream.Collectors;
 
 public class GameActivity extends AppCompatActivity {
@@ -31,10 +34,19 @@ public class GameActivity extends AppCompatActivity {
     private CodeAdapter codeAdapter;
     private List<CodeCard> codeCards;
 
+    private static final long INACTIVITY_TIME_LIMIT = 2 * 60 * 1000; // 2 minutos en milisegundos
+
+    private Handler inactivityHandler = new Handler();
+
+    private Runnable inactivityRunnable = this::onInactivityTimeout;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+
+
 
         // Initialize codeCards
         /*codeCards = new ArrayList<>();
@@ -174,7 +186,23 @@ public class GameActivity extends AppCompatActivity {
         builder.create().show();  // Mostrar el diálogo
     }
 
+    private void onInactivityTimeout() {
+        // Mostrar diálogo de victoria por inactividad
+        new AlertDialog.Builder(this)
+                .setTitle("¡Has ganado!")
+                .setMessage("Nadie ha tocado nada en 2 minutos. ¡Eres el maestro de la paciencia!")
+                .setPositiveButton("Aceptar", (dialog, which) -> {
+                    // Lógica para finalizar el juego o mostrar el WinnerBoard
+                    finish(); // o redirigir a la pantalla del WinnerBoard
+                })
+                .setCancelable(false)
+                .show();
+    }
 
+    private void resetInactivityTimer() {
+        inactivityHandler.removeCallbacks(inactivityRunnable); // Detiene el temporizador anterior
+        inactivityHandler.postDelayed(inactivityRunnable, INACTIVITY_TIME_LIMIT); // Inicia uno nuevo
+    }
 
     private void initializeNewGame() {
         // Initialize default game state
@@ -192,6 +220,18 @@ public class GameActivity extends AppCompatActivity {
         // If you're using a RecyclerView, you might need to reset the adapter
         codeAdapter = new CodeAdapter(codeCards);
         rvCodePanel.setAdapter(codeAdapter);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        resetInactivityTimer(); // Reiniciar el temporizador al volver a la actividad
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        inactivityHandler.removeCallbacks(inactivityRunnable); // Detener el temporizador al pausar la actividad
     }
 
     // CodeCard model class
