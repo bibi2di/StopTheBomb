@@ -1,18 +1,26 @@
 package com.example.stopthebomb;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.Locale;
+
 public class MainActivity extends AppCompatActivity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
+
+        SharedPreferences sharedPreferences = getSharedPreferences("GameSettings", MODE_PRIVATE);
 
         // Initialize buttons
         Button btnPlay = findViewById(R.id.btnPlay);
@@ -59,6 +67,17 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+    }
+    private void applySavedLanguage() {
+        SharedPreferences sharedPreferences = getSharedPreferences("GameSettings", MODE_PRIVATE);
+        String selectedLanguage = sharedPreferences.getString("selectedLanguage", "es");
+
+        Locale locale = new Locale(selectedLanguage);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.setLocale(locale);
+
+        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
     }
 
 }

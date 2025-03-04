@@ -1,8 +1,21 @@
 <resources>
-    <string name="app_name">"Don't touch anything"</string>
+    <string name="app_name">Stop the bomb (or not)</string>
     <string name="playButton">Play</string>
     <string name="historial">Winner Board</string>
     <string name="conf">Settings</string>
     <string name="tutorial">Tutorial</string>
+
+    <string name="sound">Sound on/off</string>
+    <string name="vibration">Vibration on/off</string>
+    <string name="save">Save settings</string>
+    <string name="back">Back to main menu</string>
+    <string name="settings_saved">Settings changed!</string>
+
+
+    <string-array name="languages_array">
+        <item>English</item>
+        <item>Basque</item>
+        <item>Spanish</item>
+    </string-array>
 
 </resources>

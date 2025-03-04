@@ -1,9 +1,22 @@
 <resources>
-    <string name="app_name">No toques nadad</string>
+
+    <string name="app_name">Detén la bomba (o no)</string>
     <string name="playButton">Jugar</string>
     <string name="historial">Historial</string>
     <string name="conf">Configuración</string>
     <string name="tutorial">Tutorial</string>
 
+    <string name="sound">Sonido on/off</string>
+    <string name="vibration">Vibración on/off</string>
+    <string name="save">Guardar ajustes</string>
+    <string name="back">Volver al menú principal</string>
+    <string name="settings_saved">¡Ajustes guardados!</string>
+
+    <!-- Array de idiomas -->
+    <string-array name="languages_array">
+        <item>Inglés</item>
+        <item>Euskera</item>
+        <item>Castellano</item>
+    </string-array>
 
 </resources>

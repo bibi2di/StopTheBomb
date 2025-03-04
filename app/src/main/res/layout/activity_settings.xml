@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#2C3E50"
-    android:padding="16dp">
+    android:background="#BAD9E5F2"
+    android:padding="16dp"
+    tools:ignore="UseSwitchCompatOrMaterialXml">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Game Settings"
-        android:textColor="#ECF0F1"
+        android:text="@string/conf"
+        android:textColor="#2D2F2F"
         android:textSize="24sp"
         android:gravity="center"
         android:layout_marginBottom="16dp"/>
@@ -19,23 +21,31 @@
         android:id="@+id/switchSounds"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Sound Effects"
-        android:textColor="#ECF0F1"
+        android:text="@string/sound"
+        android:textColor="#3B3D3E"
         android:layout_marginBottom="16dp"/>
 
     <Switch
         android:id="@+id/switchVibration"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Vibration"
-        android:textColor="#ECF0F1"
+        android:text="@string/vibration"
+        android:textColor="#414343"
         android:layout_marginBottom="16dp"/>
+
+    <Spinner
+        android:id="@+id/spinnerLanguage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="#FF5722"
+        android:popupBackground="#E7DFDF" />
 
     <Button
         android:id="@+id/btnSaveSettings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Save Settings"
+        android:text="@string/save"
         android:backgroundTint="#3498DB"
         android:layout_marginTop="16dp"/>
 
@@ -43,7 +53,7 @@
         android:id="@+id/btnBackToMain"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Back to Main Menu"
+        android:text="@string/back"
         android:backgroundTint="#E74C3C"
         android:layout_marginTop="16dp"/>
 

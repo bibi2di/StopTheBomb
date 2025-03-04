@@ -14,17 +14,25 @@
         tools:targetApi="31">
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            tools:ignore="ExtraText"
+            android:configChanges="locale|layoutDirection">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".GameActivity" />
-        <activity android:name=".WinnerBoardActivity" />
-        <activity android:name=".SettingsActivity" />
-        <activity android:name=".TutorialActivity" />
+        <activity android:name=".GameActivity"
+                  android:configChanges="locale|layoutDirection"/>
+        <activity android:name=".WinnerBoardActivity"
+                  android:configChanges="locale|layoutDirection"
+            />
+        <activity android:name=".SettingsActivity"
+                  android:configChanges="locale|layoutDirection"/>
+
+        <activity android:name=".TutorialActivity"
+                  android:configChanges="locale|layoutDirection"/>
     </application>
 
 </manifest>

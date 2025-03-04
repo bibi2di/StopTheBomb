@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Gelditu bonba (edo ez)</string>
+    <string name="playButton">Jokatu</string>
+    <string name="historial">Historiala</string>
+    <string name="conf">Ezarpenak</string>
+    <string name="tutorial">Argibideak</string>
+
+    <string name="sound">Soinua on/off</string>
+    <string name="vibration">Vibrazioa on/off</string>
+    <string name="save">Gorde ezarpenak</string>
+    <string name="back">Itzuli menura</string>
+    <string name="settings_saved">Ezarpenak gordeta!</string>
+
+
+    <string-array name="languages_array">
+        <item>Ingelesa</item>
+        <item>Euskara</item>
+        <item>Gaztelania</item>
+    </string-array>
+
+</resources>
