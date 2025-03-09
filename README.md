@@ -22,4 +22,4 @@ Te encuentras en un avión de la escuadra nuclear de combate del general de la f
 - [x] Ficheros de texto
 - [ ] Preferencias de temas, color, etc.
 - [ ] Intents implícitos para abrir otras aplicaciones
-- [ ] Toolbar y Navigation Drawer
+- [x] Toolbar y Navigation Drawer
