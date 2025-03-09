@@ -1,15 +1,22 @@
 <resources>
-    <string name="app_name">Detén la bomba (o no)</string>
+    <!--MAIN-->
+    <string name="app_name">Stop The Bomb</string>
     <string name="playButton">Jugar</string>
-    <string name="historial">Historial</string>
+    <string name="historial">Logros y finales</string>
     <string name="conf">Configuración</string>
     <string name="tutorial">Tutorial</string>
+    <string name="atras">Atrás</string>
 
+    <!--CONF-->
     <string name="sound">Sonido on/off</string>
     <string name="vibration">Vibración on/off</string>
+    <string name="language">Idioma</string>
     <string name="save">Guardar ajustes</string>
     <string name="back">Volver al menú principal</string>
     <string name="settings_saved">¡Ajustes guardados!</string>
+    <string name="sum_idioma">Selecciona el idioma de la app</string>
+    <string name="sum_sonido">Activa/desactiva el sonido de la app</string>
+    <string name="sum_vibra">Activa/desactiva la vibración de la app</string>
 
 
     <string-array name="languages_array">
@@ -17,4 +24,12 @@
         <item>Euskera</item>
         <item>Castellano</item>
     </string-array>
+
+    <!--TUT-->
+    <string name="como_jugar">Cómo Jugar:</string>
+    <string name="tut1">1964. Guerra Fría. </string>
+    <string name="tut2">Te encuentras en un avión de la escuadra nuclear de combate del general de la fuerza aérea de los estados unidos. </string>
+    <string name="tut3">El piloto del avión te pide que vigiles los controles durante unos minutos con órdenes muy específicas.</string>
+    <string name="tut4">Tanto si obedeces como si no, tus acciones tendrán consecuencias.</string>
+
 </resources>

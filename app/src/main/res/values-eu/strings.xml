@@ -1,15 +1,22 @@
 <resources>
-    <string name="app_name">Gelditu bonba (edo ez)</string>
+    <!--MAIN-->
+    <string name="app_name">Stop The Bomb</string>
     <string name="playButton">Jokatu</string>
-    <string name="historial">Historiala</string>
+    <string name="historial">Lorpenak eta Amaierak</string>
     <string name="conf">Ezarpenak</string>
     <string name="tutorial">Argibideak</string>
+    <string name="atras">Atzera</string>
 
+    <!--CONF-->
     <string name="sound">Soinua on/off</string>
-    <string name="vibration">Vibrazioa on/off</string>
+    <string name="vibration">Bibrazioa on/off</string>
+    <string name="language">Hizkuntza</string>
     <string name="save">Gorde ezarpenak</string>
     <string name="back">Itzuli menura</string>
     <string name="settings_saved">Ezarpenak gordeta!</string>
+    <string name="sum_idioma">Aukeratu app-aren hizkuntza</string>
+    <string name="sum_sonido">Piztu/itzali app-aren soinua</string>
+    <string name="sum_vibra">Piztu/itzali app-aren bibrazioa</string>
 
 
     <string-array name="languages_array">
@@ -17,5 +24,12 @@
         <item>Euskara</item>
         <item>Gaztelania</item>
     </string-array>
+
+    <!--TUT-->
+    <string name="como_jugar">Nola Jokatu:</string>
+    <string name="tut1">1964. Gerran Hotza.</string>
+    <string name="tut2">Estatubatuetako Aire Indarretako generalaren armada nuklearreko hegazkin batean zaude.</string>
+    <string name="tut3">Hegazkinaren gidariak kontrolak zaintzeko eskatzen dizu minutu batzuk, agindu oso zehatzekin.</string>
+    <string name="tut4">Obeditzen baduzu edo ez, zure ekintzek ondorioak izango dituzte.</string>
 
 </resources>

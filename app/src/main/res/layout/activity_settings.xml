@@ -1,60 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<!-- activity_settings.xml -->
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#BAD9E5F2"
-    android:padding="16dp"
-    tools:ignore="UseSwitchCompatOrMaterialXml">
+    android:layout_height="match_parent">
 
-    <TextView
+    <!-- AppBarLayout para manejar la Toolbar correctamente -->
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/conf"
-        android:textColor="#2D2F2F"
-        android:textSize="24sp"
-        android:gravity="center"
-        android:layout_marginBottom="16dp"/>
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-    <Switch
-        android:id="@+id/switchSounds"
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:title="@string/conf"
+            android:navigationIcon="@drawable/ic_back_arrow" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- FrameLayout con el comportamiento de desplazamiento correcto -->
+    <FrameLayout
+        android:id="@+id/settings_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/sound"
-        android:textColor="#3B3D3E"
-        android:layout_marginBottom="16dp"/>
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-    <Switch
-        android:id="@+id/switchVibration"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/vibration"
-        android:textColor="#414343"
-        android:layout_marginBottom="16dp"/>
 
-    <Spinner
-        android:id="@+id/spinnerLanguage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:backgroundTint="#FF5722"
-        android:popupBackground="#E7DFDF" />
-
-    <Button
-        android:id="@+id/btnSaveSettings"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/save"
-        android:backgroundTint="#3498DB"
-        android:layout_marginTop="16dp"/>
-
-    <Button
-        android:id="@+id/btnBackToMain"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/back"
-        android:backgroundTint="#E74C3C"
-        android:layout_marginTop="16dp"/>
-
-</LinearLayout>

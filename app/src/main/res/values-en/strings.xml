@@ -1,15 +1,22 @@
 <resources>
-    <string name="app_name">Stop the bomb (or not)</string>
+    <!--MAIN-->
+    <string name="app_name">Stop The Bomb</string>
     <string name="playButton">Play</string>
-    <string name="historial">Winner Board</string>
+    <string name="historial">Achievements and Endings</string>
     <string name="conf">Settings</string>
     <string name="tutorial">Tutorial</string>
+    <string name="atras">Back</string>
 
+    <!--CONF-->
     <string name="sound">Sound on/off</string>
+    <string name="language">Language</string>
     <string name="vibration">Vibration on/off</string>
     <string name="save">Save settings</string>
     <string name="back">Back to main menu</string>
     <string name="settings_saved">Settings changed!</string>
+    <string name="sum_idioma">Select app language</string>
+    <string name="sum_sonido">Activate/deactivate app sound</string>
+    <string name="sum_vibra">Activate/deactivate app vibration</string>
 
 
     <string-array name="languages_array">
@@ -17,5 +24,13 @@
         <item>Basque</item>
         <item>Spanish</item>
     </string-array>
+
+    <!--TUT-->
+    <string name="como_jugar">How to Play:</string>
+    <string name="tut1">1964. Cold War.</string>
+    <string name="tut2">You are aboard a nuclear combat squadron plane of the United States Air Force general.</string>
+    <string name="tut3">The pilot of the plane asks you to monitor the controls for a few minutes with very specific orders.</string>
+    <string name="tut4">Whether you obey or not, your actions will have consequences.</string>
+
 
 </resources>

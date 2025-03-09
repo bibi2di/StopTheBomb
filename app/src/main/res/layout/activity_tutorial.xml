@@ -13,7 +13,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Game Tutorial"
+            android:text="@string/tutorial"
             android:textColor="#ECF0F1"
             android:textSize="24sp"
             android:gravity="center"
@@ -22,7 +22,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="How to Play:"
+            android:text="@string/como_jugar"
             android:textColor="#3498DB"
             android:textSize="20sp"
             android:layout_marginBottom="8dp"/>
@@ -30,21 +30,28 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="1. The goal is simple: DO NOT TOUCH ANYTHING!"
+            android:text="@string/tut1"
             android:textColor="#ECF0F1"
             android:layout_marginBottom="8dp"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="2. Every time you touch the panel, you lose points."
+            android:text="@string/tut2"
             android:textColor="#ECF0F1"
             android:layout_marginBottom="8dp"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="3. Try to keep your score as high as possible."
+            android:text="@string/tut3"
+            android:textColor="#ECF0F1"
+            android:layout_marginBottom="8dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/tut4"
             android:textColor="#ECF0F1"
             android:layout_marginBottom="8dp"/>
 
@@ -52,7 +59,7 @@
             android:id="@+id/btnBackToMain"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Back to Main Menu"
+            android:text="@string/atras"
             android:backgroundTint="#E74C3C"
             android:layout_marginTop="16dp"/>
 

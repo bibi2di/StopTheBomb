@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- res/xml/preferences.xml -->
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Cambio de idioma -->
+    <ListPreference
+        android:key="language_preference"
+        android:title="@string/language"
+        android:summary="@string/sum_idioma"
+        android:entries="@array/languages_array"
+        android:entryValues="@array/languages_values"
+        android:defaultValue="es" />
+
+    <!-- Sonido -->
+    <SwitchPreferenceCompat
+        android:key="sound_preference"
+        android:title="@string/sound"
+        android:summary="@string/sum_sonido"
+        android:defaultValue="true" />
+
+    <!-- Vibración -->
+    <SwitchPreferenceCompat
+        android:key="vibration_preference"
+        android:title="@string/vibration"
+        android:summary="@string/sum_vibra"
+        android:defaultValue="true" />
+</PreferenceScreen>
