@@ -32,4 +32,8 @@
     <string name="tut3">Hegazkinaren gidariak kontrolak zaintzeko eskatzen dizu minutu batzuk, agindu oso zehatzekin.</string>
     <string name="tut4">Obeditzen baduzu edo ez, zure ekintzek ondorioak izango dituzte.</string>
 
+
+    <!-- LOGROS -->
+    <string name="progress_title">Progreso</string>
+    <string name="score_format">hola</string>
 </resources>

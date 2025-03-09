@@ -1,5 +1,10 @@
 package com.example.stopthebomb.activities;
 
+import android.Manifest;
+import android.app.PendingIntent;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +17,13 @@ import android.os.Handler;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.stopthebomb.MyApplication;
 import com.example.stopthebomb.models.CodeCard;
 import com.example.stopthebomb.adapters.NumberAdapter;
 import com.example.stopthebomb.models.NumberCard;
@@ -241,6 +250,51 @@ public class GameActivity extends AppCompatActivity {
                 })
                 .setCancelable(false)
                 .show();
+        mostrarNotificacionDeLogro();
+    }
+
+    private void mostrarNotificacionDeLogro() {
+
+        // Check for permission first
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1);
+                return;
+            }
+        }
+        // Crear un intent para cuando se haga clic en la notificación (puede abrir una actividad o hacer otra acción)
+        Intent intent = new Intent(this, MainActivity.class); // O la actividad que prefieras
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+
+        // Crear la notificación con el ícono del logro
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, MyApplication.CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_final1) // Icono del logro (debe estar en res/drawable)
+                .setContentTitle("Logro Desbloqueado")
+                .setContentText("Has hecho caso al teniente")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(pendingIntent) // Abre la actividad al hacer clic
+                .setAutoCancel(true);
+
+        // Mostrar la notificación
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+          //  if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            //    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1);
+              //  return;
+           // }
+        //}
+
+        notificationManager.notify(1, builder.build());
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 1 && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            mostrarNotificacionDeLogro();
+        }
     }
 
     private void resetInactivityTimer() {
@@ -353,15 +407,4 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
-    /*private void showRandomPenalty() {
-        String[] penalties = {
-                "Oops! Careful!",
-                "Wrong move!",
-                "Stay calm!",
-                "Careful now!"
-        };
-
-        String penalty = penalties[new Random().nextInt(penalties.length)];
-        Toast.makeText(this, penalty, Toast.LENGTH_SHORT).show();
-    }*/
 }

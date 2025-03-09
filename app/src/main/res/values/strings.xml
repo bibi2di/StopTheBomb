@@ -40,5 +40,8 @@
     <string name="tut3">El piloto del avión te pide que vigiles los controles durante unos minutos con órdenes muy específicas.</string>
     <string name="tut4">Tanto si obedeces como si no, tus acciones tendrán consecuencias.</string>
 
+    <!-- LOGROS -->
+    <string name="progress_title">Progreso</string>
+    <string name="score_format">hola</string>
 
 </resources>

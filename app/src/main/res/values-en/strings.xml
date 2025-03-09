@@ -32,5 +32,8 @@
     <string name="tut3">The pilot of the plane asks you to monitor the controls for a few minutes with very specific orders.</string>
     <string name="tut4">Whether you obey or not, your actions will have consequences.</string>
 
+    <!-- LOGROS -->
+    <string name="progress_title">Progress</string>
+    <string name="score_format">hola</string>
 
 </resources>
