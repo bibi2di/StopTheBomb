@@ -24,4 +24,12 @@
         android:title="@string/vibration"
         android:summary="@string/sum_vibra"
         android:defaultValue="true" />
+
+    <!-- Permisos de notificaciones -->
+    <CheckBoxPreference
+        android:key="notification_permission"
+        android:title="Enable Notifications"
+        android:summary="Allow app to send notifications"
+        android:defaultValue="false" />
+
 </PreferenceScreen>

@@ -1,10 +1,17 @@
 package com.example.stopthebomb.fragments;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
+import android.widget.Toast;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.preference.CheckBoxPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -39,6 +46,20 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
                 return true;
             });
+
+            // Configure listener for notification permission toggle
+            CheckBoxPreference notificationPermissionPreference = findPreference("notification_permission");
+            if (notificationPermissionPreference != null) {
+                notificationPermissionPreference.setOnPreferenceChangeListener((preference, newValue) -> {
+                    boolean enableNotifications = (boolean) newValue;
+                    if (enableNotifications) {
+                        requestNotificationPermission();
+                    } else {
+                        disableNotifications();
+                    }
+                    return true;
+                });
+            }
         }
     }
 
@@ -70,5 +91,24 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             getActivity().finish();
         }
+    }
+
+    private void requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1);
+            } else {
+                // Notification permission already granted, proceed to enable notifications
+                Toast.makeText(getActivity(), "Notification permission granted!", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void disableNotifications() {
+        // Handle the case when notifications are disabled
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getActivity());
+        notificationManager.cancelAll(); // This will cancel all notifications.
+
+        Toast.makeText(getActivity(), "Notifications disabled!", Toast.LENGTH_SHORT).show();
     }
 }

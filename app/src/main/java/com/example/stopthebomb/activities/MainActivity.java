@@ -1,8 +1,10 @@
 package com.example.stopthebomb.activities;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
@@ -11,7 +13,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceManager;
 
@@ -33,7 +37,10 @@ public class MainActivity extends BaseActivity {
         cargarPreferencias();
         configurarListenerPreferencias();
 
-        // Initialize buttons
+        // Solicitar permiso de notificaciones:
+        solicitarPermisoNotificaciones();
+
+        // Inicializar botones:
         Button btnPlay = findViewById(R.id.btnPlay);
         Button btnWinnerBoard = findViewById(R.id.btnWinnerBoard);
         Button btnSettings = findViewById(R.id.btnSettings);
@@ -59,6 +66,16 @@ public class MainActivity extends BaseActivity {
             Intent tutorialIntent = new Intent(MainActivity.this, TutorialActivity.class);
             startActivity(tutorialIntent);
         });
+    }
+
+    private void solicitarPermisoNotificaciones() {
+        /// Check for permission first
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1);
+                return;
+            }
+        }
     }
 
     // Override attachBaseContext to apply saved locale

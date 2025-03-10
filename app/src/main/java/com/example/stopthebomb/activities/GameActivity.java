@@ -4,28 +4,34 @@ import android.Manifest;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.os.Handler;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.stopthebomb.MyApplication;
+import com.example.stopthebomb.fragments.DrawerFragment;
 import com.example.stopthebomb.models.CodeCard;
 import com.example.stopthebomb.adapters.NumberAdapter;
+import com.example.stopthebomb.models.GameViewModel;
 import com.example.stopthebomb.models.NumberCard;
 import com.example.stopthebomb.R;
 
@@ -38,21 +44,13 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-public class GameActivity extends AppCompatActivity {
-    private int score = 0;
+public class GameActivity extends BaseActivity {
+    private GameViewModel gameViewModel;
     private TextView tvScore;
     private RecyclerView rvCodePanel;
     private RecyclerView rvNumberPanel;
     private CodeAdapter codeAdapter;
     private NumberAdapter numberAdapter;
-    private List<CodeCard> codeCards;
-    private List<NumberCard> numberCards;
-
-    private static final long INACTIVITY_TIME_LIMIT = 2 * 60 * 1000; // 2 minutos en milisegundos
-
-    private Handler inactivityHandler = new Handler();
-
-    private Runnable inactivityRunnable = this::onInactivityTimeout;
 
 
     @Override
@@ -61,141 +59,126 @@ public class GameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game);
 
 
+        // Inicializar vistas:
+        initializeViews();
+        // Inicializar botones:
+        setupButtons();
+        // Inicializar ViewModel:
+        gameViewModel = new ViewModelProvider(this).get(GameViewModel.class);
+        // Configurar observers:
+        setupObservers();
+        // Inicializar RecyclerViews:
+        setupRecyclerViews();
+        // Mostrar diálogos:
+        showDialogsSequentially();
 
-        // Initialize codeCards
-        /*codeCards = new ArrayList<>();
-        codeCards.add(new CodeCard("A"));
-        codeCards.add(new CodeCard("B"));
-        codeCards.add(new CodeCard("C"));*/
-        // Initialize database helper
-
-
-        // Initialize views
-        tvScore = findViewById(R.id.tvScore);
-        rvCodePanel = findViewById(R.id.rvCodePanel);
-        rvNumberPanel = findViewById(R.id.rvNumberPanel);
-        Button btnBack = findViewById(R.id.btnBack);
-        Button btnRadar = findViewById(R.id.btnRadar);
-        Button btnRadio = findViewById(R.id.btnRadio);
-        Button btnCajon = findViewById(R.id.btnCajon);
 
 
         // Setup back button
-        btnBack.setOnClickListener(v -> finish());
 
-        // Initialize code cards
-        initializeCodeCards();
 
-        // Initialize number cards
-        initializeNumberCards();
+        // Observers
 
-        // Setup RecyclerView
-        codeAdapter = new CodeAdapter(codeCards);
-        rvCodePanel.setLayoutManager(new LinearLayoutManager(this));
-        rvCodePanel.setAdapter(codeAdapter);
 
-        // Setup Number RecyclerView
-        numberAdapter = new NumberAdapter(numberCards, this);
-        rvNumberPanel.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        rvNumberPanel.setAdapter(numberAdapter);
+        // Initialize RecyclerViews
+
 
         // Setup additional buttons
-        btnRadar.setOnClickListener(v -> {
-            Toast.makeText(this, "Radar activado", Toast.LENGTH_SHORT).show();
-            resetInactivityTimer();
-        });
 
-        btnRadio.setOnClickListener(v -> {
-            Toast.makeText(this, "Radio sintonizada", Toast.LENGTH_SHORT).show();
-            resetInactivityTimer();
-        });
-
-        btnCajon.setOnClickListener(v -> {
-            Toast.makeText(this, "Cajón abierto", Toast.LENGTH_SHORT).show();
-            resetInactivityTimer();
-        });
 
 
         // Update initial score
-        updateScore();
+        //updateScore();
 
         // Mostrar diálogo de inicio:
         showDialogsSequentially();
     }
 
-    // Method to get current code combination
-    private String getCurrentCodeCombination() {
-        // Combine the letters from your CodeCards
-        return codeCards.stream()
-                .map(CodeCard::getLetter)
-                .collect(Collectors.joining());
+    private void initializeViews(){
+        tvScore = findViewById(R.id.tvScore);
+        rvCodePanel = findViewById(R.id.rvCodePanel);
+        rvNumberPanel = findViewById(R.id.rvNumberPanel);
     }
 
-    // Method to check for achievements
-    private boolean checkForAchievement() {
-        // Implement your achievement logic
-        return score > 100; // Example condition
-    }
+    private void setupButtons(){
+        Button btnBack = findViewById(R.id.btnBack);
+        Button btnRadar = findViewById(R.id.btnRadar);
+        Button btnRadio = findViewById(R.id.btnRadio);
+        Button btnCajon = findViewById(R.id.btnCajon);
 
-    private void initializeCodeCards() {
-        codeCards = new ArrayList<>();
-        codeCards.add(new CodeCard("A"));
-        codeCards.add(new CodeCard("B"));
-        codeCards.add(new CodeCard("C"));
-    }
-
-    private void initializeNumberCards() {
-        numberCards = new ArrayList<>();
-        Random random = new Random();
-
-        // Add 5 random numbers between 0-9
-        for (int i = 0; i < 5; i++) {
-            numberCards.add(new NumberCard(random.nextInt(10)));
-        }
-    }
-
-    private void updateScore() {
-        tvScore.setText("Score: " + score);
-    }
-    private void updateUI() {
-        // Update score TextView
-        tvScore.setText("Score: " + score);
-
-        // Update RecyclerView with restored code cards
-        if (codeAdapter != null) {
-            // Notify adapter of data changes
-            codeAdapter.notifyDataSetChanged();
-        }
-    }
-
-    // Show a dialog with a question and multiple choice options
-    private void showFirstDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Teniente Cletus");
-        builder.setMessage("¡Eh tú! ¡Sí, tú! Ven aquí un momento");
-
-        // Agregar un solo botón
-        builder.setPositiveButton("Vale", (dialog, which) -> {
-            handleResponse("Vale");
+        btnBack.setOnClickListener(v -> finish());
+        btnRadar.setOnClickListener(v -> {
+            Toast.makeText(this, "Radar activado", Toast.LENGTH_SHORT).show();
         });
 
-        builder.create().show();
-    }
+        btnRadio.setOnClickListener(v -> {
+            Toast.makeText(this, "Radio sintonizada", Toast.LENGTH_SHORT).show();
+        });
 
-    private void handleResponse(String response) {
-        // Handle the selected response (e.g., update score, show feedback, etc.)
-        Toast.makeText(this, "Seleccionaste: " + response, Toast.LENGTH_SHORT).show();
-
-        // Example: Increase score based on the answer (you can change this logic)
-        if (response.equals("Vale")) {
-            score += 10;
-        } else {
-            score -= 5;
+        btnCajon.setOnClickListener(v -> {
+            Toast.makeText(this, "Cajón abierto", Toast.LENGTH_SHORT).show();
+            showFragment();
+        });
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+                @Override
+                public void handleOnBackPressed() {
+                    // Aquí defines la lógica que quieres cuando el usuario presione atrás
+                    if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                        // Si hay fragmentos en la pila de retroceso, se hace pop
+                        getSupportFragmentManager().popBackStack();
+                    } else {
+                        // Si no, se llama a finish para cerrar la actividad
+                        finish();
+                    }
+                }
+            });
         }
 
-        // Update the UI with the new score
-        updateScore();
     }
+
+    private void setupObservers(){
+        gameViewModel.getInactivityStatus().observe(this, isInactive -> {
+            if (isInactive) {
+                // Mostrar el mensaje de inactividad (por ejemplo, un diálogo)
+                showInactivityDialog();
+            }
+        });
+        gameViewModel.getScore().observe(this, score -> {
+            tvScore.setText("Score: " + score);
+        });
+
+        gameViewModel.getCodeCards().observe(this, codeCards -> {
+            codeAdapter.notifyDataSetChanged();
+        });
+
+        gameViewModel.getNumberCards().observe(this, numberCards -> {
+            numberAdapter.notifyDataSetChanged();
+        });
+    }
+
+    private void setupRecyclerViews(){
+        codeAdapter = new CodeAdapter(gameViewModel.getCodeCards().getValue());
+        rvCodePanel.setLayoutManager(new LinearLayoutManager(this));
+        rvCodePanel.setAdapter(codeAdapter);
+
+        numberAdapter = new NumberAdapter(gameViewModel.getNumberCards().getValue(), this);
+        rvNumberPanel.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        rvNumberPanel.setAdapter(numberAdapter);
+    }
+
+    private void showFragment(){
+        FrameLayout fragmentContainer = findViewById(R.id.fragmentContainer);
+        fragmentContainer.setVisibility(View.VISIBLE); // Make container visible
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.fade_out)
+                .replace(R.id.fragmentContainer, new DrawerFragment())
+                .addToBackStack(null)
+                .commit();
+    }
+
 
     private List<String> loadDialogues() {
         List<String> dialogues = new ArrayList<>();
@@ -239,20 +222,18 @@ public class GameActivity extends AppCompatActivity {
         builder.create().show();  // Mostrar el diálogo
     }
 
-    private void onInactivityTimeout() {
-        // Mostrar diálogo de victoria por inactividad
+    private void showInactivityDialog() {
         new AlertDialog.Builder(this)
                 .setTitle("¡Has ganado!")
                 .setMessage("Nadie ha tocado nada en 2 minutos. ¡Eres el maestro de la paciencia!")
                 .setPositiveButton("Aceptar", (dialog, which) -> {
                     // Lógica para finalizar el juego o mostrar el WinnerBoard
-                    finish(); // o redirigir a la pantalla del WinnerBoard
+                    finish(); // O redirigir a la pantalla del WinnerBoard
                 })
                 .setCancelable(false)
                 .show();
         mostrarNotificacionDeLogro();
     }
-
     private void mostrarNotificacionDeLogro() {
 
         // Check for permission first
@@ -294,42 +275,22 @@ public class GameActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 1 && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             mostrarNotificacionDeLogro();
+
         }
-    }
-
-    private void resetInactivityTimer() {
-        inactivityHandler.removeCallbacks(inactivityRunnable); // Detiene el temporizador anterior
-        inactivityHandler.postDelayed(inactivityRunnable, INACTIVITY_TIME_LIMIT); // Inicia uno nuevo
-    }
-
-    private void initializeNewGame() {
-        // Initialize default game state
-        score = 0;
-
-        // Create new code cards with default letters
-        codeCards = new ArrayList<>();
-        codeCards.add(new CodeCard("A"));
-        codeCards.add(new CodeCard("B"));
-        codeCards.add(new CodeCard("C"));
-
-        // Update UI with new state
-        updateUI();
-
-        // If you're using a RecyclerView, you might need to reset the adapter
-        codeAdapter = new CodeAdapter(codeCards);
-        rvCodePanel.setAdapter(codeAdapter);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        resetInactivityTimer(); // Reiniciar el temporizador al volver a la actividad
+        // Notificar al ViewModel que la actividad ha vuelto al primer plano
+        gameViewModel.onResume();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        inactivityHandler.removeCallbacks(inactivityRunnable); // Detener el temporizador al pausar la actividad
+        // Notificar al ViewModel que la actividad ha salido del primer plano
+        gameViewModel.onPause();
     }
 
     // CodeCard model class
@@ -386,8 +347,8 @@ public class GameActivity extends AppCompatActivity {
                     tvLetter.setText(card.getLetter());
 
                     // Decrease score for changing letter
-                    score--;
-                    updateScore();
+                    //score--;
+                    //updateScore();
                     //showRandomPenalty();
                 });
 
@@ -399,8 +360,8 @@ public class GameActivity extends AppCompatActivity {
                     tvLetter.setText(card.getLetter());
 
                     // Decrease score for changing letter
-                    score--;
-                    updateScore();
+                    //score--;
+                    //updateScore();
                     //showRandomPenalty();
                 });
             }
