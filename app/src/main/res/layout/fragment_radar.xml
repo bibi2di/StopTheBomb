@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@android:color/white"
+        android:elevation="8dp"
+        android:padding="24dp"
+        android:layout_margin="32dp"
+        android:clipToPadding="false"
+        android:clipChildren="false"
+        android:layout_gravity="center"
+        android:gravity="center">
+        <!-- Botón para abrir la ubicación predefinida -->
+        <Button
+            android:id="@+id/btnLocalizacion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Abrir Localización" />
+
+        <!-- EditText para introducir el destino personalizado -->
+        <EditText
+            android:id="@+id/editDestino"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Introduce una dirección"
+            android:inputType="text" />
+
+        <!-- Botón para abrir la ubicación personalizada -->
+        <Button
+            android:id="@+id/btnEstablecerDestino"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Establecer Destino" />
+
+        <Button
+            android:id="@+id/btnClose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cerrar"
+            android:layout_gravity="end"
+            android:layout_margin="16dp" />
+    </LinearLayout>
+
+</LinearLayout>
+
+
+

@@ -43,8 +43,8 @@ public class PlansFragment extends Fragment {
         Button btnBack = view.findViewById(R.id.btnBack);
 
         // Configurar los listeners para los botones
-        //btnPlanR.setOnClickListener(v -> showPlanDialog());
-        btnPlanL.setOnClickListener(v -> showPlanDialog());
+        btnPlanR.setOnClickListener(v -> showPlanRDialog());
+        btnPlanL.setOnClickListener(v -> showPlanLDialog());
 
         btnBack.setOnClickListener(v -> {
             // Volver al fragmento anterior
@@ -54,12 +54,12 @@ public class PlansFragment extends Fragment {
         return view;
     }
 
-    private void showPlanDialog() {
+    private void showPlanLDialog() {
         String message = loadMessageBasedOnFlag();  // Cargar el mensaje dependiendo del flag
 
         // Crear un AlertDialog para mostrar el mensaje
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Plan");
+        builder.setTitle("Plan L");
 
         // Usamos un ScrollView para que el mensaje largo sea desplazable
         ScrollView scrollView = new ScrollView(getContext());
@@ -76,6 +76,30 @@ public class PlansFragment extends Fragment {
 
         builder.show();
     }
+
+    private void showPlanRDialog() {
+        //String message = loadMessageBasedOnFlag();  // Cargar el mensaje dependiendo del flag
+
+        // Crear un AlertDialog para mostrar el mensaje
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Plan R");
+
+        // Usamos un ScrollView para que el mensaje largo sea desplazable
+        ScrollView scrollView = new ScrollView(getContext());
+        TextView textView = new TextView(getContext());
+        textView.setText("aaaaaaaaaaaaa");
+        textView.setPadding(20, 20, 20, 20);  // Optional, to give some padding to the text
+        scrollView.addView(textView);
+
+        builder.setView(scrollView);  // Establecemos el ScrollView en el AlertDialog
+
+        builder.setPositiveButton("Aceptar", (dialog, which) -> {
+            // Puedes agregar aquí alguna lógica si es necesario
+        });
+
+        builder.show();
+    }
+
 
     private String loadMessageBasedOnFlag() {
         // Determinamos el archivo que se va a cargar dependiendo de 'isNameCorrect'

@@ -34,6 +34,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.stopthebomb.MyApplication;
 import com.example.stopthebomb.fragments.DrawerFragment;
 import com.example.stopthebomb.fragments.PlansFragment;
+import com.example.stopthebomb.fragments.RadarFragment;
 import com.example.stopthebomb.models.CodeCard;
 import com.example.stopthebomb.adapters.NumberAdapter;
 import com.example.stopthebomb.models.GameViewModel;
@@ -94,9 +95,7 @@ public class GameActivity extends BaseActivity {
         Button btnCajon = findViewById(R.id.btnCajon);
 
         btnBack.setOnClickListener(v -> finish());
-        btnRadar.setOnClickListener(v -> {
-            Toast.makeText(this, "Radar activado", Toast.LENGTH_SHORT).show();
-        });
+        btnRadar.setOnClickListener(v -> openRadarFragment());
 
         btnRadio.setOnClickListener(v -> {
             Toast.makeText(this, "Radio sintonizada", Toast.LENGTH_SHORT).show();
@@ -150,6 +149,13 @@ public class GameActivity extends BaseActivity {
 
     }
 
+    public void openRadarFragment() {
+        RadarFragment radarFragment = new RadarFragment();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragmentContainer, radarFragment)
+                .addToBackStack(null) // Si quieres que el fragmento sea apilable
+                .commit();
+    }
 
 
 
