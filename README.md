@@ -17,9 +17,9 @@ Te encuentras en un avión de la escuadra nuclear de combate del general de la f
 - [ ] Lógica del juego (a medias)
 - [ ] Control de pila de actividades
   
-- [ ] Fragments, orientaciones
+- [x] Fragments, orientaciones
 - [x] Idiomas
 - [x] Ficheros de texto
 - [ ] Preferencias de temas, color, etc.
-- [ ] Intents implícitos para abrir otras aplicaciones
+- [x] Intents implícitos para abrir otras aplicaciones
 - [x] Toolbar y Navigation Drawer
