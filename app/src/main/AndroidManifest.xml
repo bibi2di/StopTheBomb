@@ -26,7 +26,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.GameActivity"
-                  android:configChanges="locale|layoutDirection"/>
+                  android:configChanges="locale|layoutDirection|orientation|screenSize|keyboardHidden"/>
         <activity android:name=".activities.WinnerBoardActivity"
                   android:configChanges="locale|layoutDirection"
             />

@@ -9,6 +9,7 @@ import android.widget.Button;
 import androidx.fragment.app.Fragment;
 
 import com.example.stopthebomb.R;
+import com.example.stopthebomb.activities.GameActivity;
 
 public class DrawerFragment extends Fragment {
 
@@ -28,7 +29,13 @@ public class DrawerFragment extends Fragment {
 
         btnIdCard.setOnClickListener(v -> openFragment(new IdCardFragment()));
         //btnInstructions.setOnClickListener(v -> openFragment(new InstructionsFragment()));
-        //btnPlans.setOnClickListener(v -> openFragment(new PlansFragment()));
+        btnPlans.setOnClickListener(v -> {
+            // Call the method to show the PlansFragment from GameActivity
+            if (getActivity() instanceof GameActivity) {
+                ((GameActivity) getActivity()).showPlansFragment();
+            }
+        });
+
         btnClose.setOnClickListener(v -> closeFragment());
         return view;
     }

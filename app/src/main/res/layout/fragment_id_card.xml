@@ -13,68 +13,68 @@
 
     <!-- Contenido de la tarjeta -->
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center">
+        android:layout_width="156dp"
+        android:layout_height="350dp"
+        android:gravity="center"
+        android:orientation="vertical">
 
         <!-- Imagen de perfil -->
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imgProfile"
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:src="@drawable/ic_profile"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            android:src="@drawable/ic_profile" />
 
         <!-- Nombre -->
         <TextView
             android:id="@+id/tvName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
             android:text="Nombre"
             android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_marginTop="20dp"
-            android:layout_gravity="center"/>
+            android:textStyle="bold" />
 
         <!-- Apellidos -->
         <TextView
             android:id="@+id/tvLastName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Apellido"
-            android:textSize="16sp"
+            android:layout_gravity="center"
             android:layout_marginTop="10dp"
-            android:layout_gravity="center"/>
+            android:text="Apellido"
+            android:textSize="16sp" />
 
         <!-- Número de ID -->
         <TextView
             android:id="@+id/tvIdNumber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ID:"
-            android:textSize="16sp"
+            android:layout_gravity="center"
             android:layout_marginTop="10dp"
-            android:layout_gravity="center"/>
+            android:text="ID:"
+            android:textSize="16sp" />
 
         <!-- Nacionalidad -->
         <TextView
             android:id="@+id/tvNationality"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Nacionalidad:"
-            android:textSize="16sp"
+            android:layout_gravity="center"
             android:layout_marginTop="10dp"
-            android:layout_gravity="center"/>
+            android:text="Nacionalidad:"
+            android:textSize="16sp" />
 
         <!-- Botón de atrás -->
         <Button
             android:id="@+id/btnBack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Atrás"
+            android:layout_gravity="center"
             android:layout_marginTop="30dp"
-            android:layout_gravity="center"/>
+            android:text="Atrás" />
 
     </LinearLayout>
 

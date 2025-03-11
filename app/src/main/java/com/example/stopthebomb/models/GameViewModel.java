@@ -13,8 +13,7 @@ import java.util.Random;
 public class GameViewModel extends ViewModel {
     private MutableLiveData<Integer> score = new MutableLiveData<>(0);
     private MutableLiveData<List<CodeCard>> codeCards = new MutableLiveData<>(new ArrayList<>());
-    private MutableLiveData<List<NumberCard>> numberCards = new MutableLiveData<>(new ArrayList<>());
-    private MutableLiveData<Boolean> isInactive = new MutableLiveData<>(false);
+    private MutableLiveData<List<NumberCard>> numberCards = new MutableLiveData<>(new ArrayList<>());    private MutableLiveData<Boolean> isInactive = new MutableLiveData<>(false);
 
     private static final long INACTIVITY_TIME_LIMIT = 2 * 60 * 1000; // 2 minutos en milisegundos
     private Handler inactivityHandler = new Handler();
@@ -53,6 +52,21 @@ public class GameViewModel extends ViewModel {
         }
         numberCards.setValue(cards);
     }
+
+    public void updateNumber(int position, int newNumber) {
+        List<NumberCard> currentList = new ArrayList<>(numberCards.getValue());
+        currentList.get(position).setNumber(newNumber);
+        numberCards.setValue(currentList); // Notify observers about the change
+    }
+
+    public void updateNumberCard(int position, NumberCard updatedCard) {
+        List<NumberCard> numberCardsList = numberCards.getValue();
+        if (numberCardsList != null && position >= 0 && position < numberCardsList.size()) {
+            numberCardsList.set(position, updatedCard);  // Modify the list
+            numberCards.setValue(numberCardsList);  // Notify observers about the change
+        }
+    }
+
 
     public void onCardUpClicked(CodeCard card) {
         char currentLetter = card.getLetter().charAt(0);
@@ -94,5 +108,7 @@ public class GameViewModel extends ViewModel {
         // Se ejecuta cuando el tiempo de inactividad se alcanza (2 minutos)
         isInactive.setValue(true); // Notificamos a la Vista que el usuario está inactivo
     }
+
+
 
 }

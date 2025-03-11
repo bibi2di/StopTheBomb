@@ -7,11 +7,15 @@ import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.os.Handler;
@@ -29,6 +33,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.stopthebomb.MyApplication;
 import com.example.stopthebomb.fragments.DrawerFragment;
+import com.example.stopthebomb.fragments.PlansFragment;
 import com.example.stopthebomb.models.CodeCard;
 import com.example.stopthebomb.adapters.NumberAdapter;
 import com.example.stopthebomb.models.GameViewModel;
@@ -52,12 +57,13 @@ public class GameActivity extends BaseActivity {
     private CodeAdapter codeAdapter;
     private NumberAdapter numberAdapter;
 
+    private boolean isNameCorrect;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
-
 
         // Inicializar vistas:
         initializeViews();
@@ -71,27 +77,8 @@ public class GameActivity extends BaseActivity {
         setupRecyclerViews();
         // Mostrar diálogos:
         showDialogsSequentially();
+        isNameCorrect = false;
 
-
-
-        // Setup back button
-
-
-        // Observers
-
-
-        // Initialize RecyclerViews
-
-
-        // Setup additional buttons
-
-
-
-        // Update initial score
-        //updateScore();
-
-        // Mostrar diálogo de inicio:
-        showDialogsSequentially();
     }
 
     private void initializeViews(){
@@ -153,8 +140,93 @@ public class GameActivity extends BaseActivity {
         });
 
         gameViewModel.getNumberCards().observe(this, numberCards -> {
-            numberAdapter.notifyDataSetChanged();
+            numberAdapter.notifyItemChanged(numberCards.size() - 1);
+            Log.d("GameActivity", "Numbers updated: " + numberCards);
+
+            if (numberCards.size() == 5) {
+                checkNumberCombination(numberCards);
+            }
         });
+
+    }
+
+
+
+
+    private void checkNumberCombination(List<NumberCard> numberCards) {
+        StringBuilder enteredCode = new StringBuilder();
+
+        Log.d("GameActivity", "Checking entered numbers:");
+        for (NumberCard card : numberCards) {
+            Log.d("GameActivity", "Number: " + card.getNumber());
+            enteredCode.append(card.getNumber());
+        }
+
+        Log.d("GameActivity", "Final entered code: " + enteredCode.toString());
+
+        if (enteredCode.toString().equals("34582")) {
+            Log.d("GameActivity", "Code matched! Showing dialog...");
+            showNameInputDialog();
+        }
+    }
+
+
+    private void showNameInputDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Introduce el nombre oculto:");
+
+        // Create an EditText field
+        final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(input);
+
+        // Set up the submit button
+        builder.setPositiveButton("Enviar", (dialog, which) -> {
+            String enteredName = input.getText().toString().trim();
+
+            // Validate name (case insensitive)
+            if (enteredName.equalsIgnoreCase("Stanley")) {
+                showSecretDialog(); // Show next dialog if correct
+                isNameCorrect = true;
+            } else {
+                Toast.makeText(this, "Nombre incorrecto. Intenta de nuevo.", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        builder.setNegativeButton("Cancelar", (dialog, which) -> dialog.cancel());
+
+        builder.show();
+    }
+
+    private void showSecretDialog() {
+        String hiddenMessage = loadHiddenMessage(); // Load text from file
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Mensaje Secreto");
+        builder.setMessage(hiddenMessage);
+
+        builder.setPositiveButton("Aceptar", (dialog, which) -> {
+            // You can add additional logic here if needed
+        });
+
+        builder.show();
+    }
+
+    // Method to read the hidden message from assets
+    private String loadHiddenMessage() {
+        StringBuilder message = new StringBuilder();
+        try {
+            InputStream is = getAssets().open("dialog_hidden.txt");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                message.append(line).append("\n");
+            }
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return message.toString();
     }
 
     private void setupRecyclerViews(){
@@ -162,7 +234,9 @@ public class GameActivity extends BaseActivity {
         rvCodePanel.setLayoutManager(new LinearLayoutManager(this));
         rvCodePanel.setAdapter(codeAdapter);
 
-        numberAdapter = new NumberAdapter(gameViewModel.getNumberCards().getValue(), this);
+        //numberAdapter = new NumberAdapter(gameViewModel.getNumberCards().getValue(), this);
+        numberAdapter = new NumberAdapter(gameViewModel.getNumberCards().getValue(), gameViewModel);
+
         rvNumberPanel.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         rvNumberPanel.setAdapter(numberAdapter);
     }
@@ -234,6 +308,69 @@ public class GameActivity extends BaseActivity {
                 .show();
         mostrarNotificacionDeLogro();
     }
+
+    private String loadMessageBasedOnFlag() {
+        // El archivo que se cargará dependiendo del estado de 'isNameCorrect'
+        String fileName = isNameCorrect ? "file_unlocked.txt" : "file_russian.txt";
+
+        StringBuilder message = new StringBuilder();
+        try {
+            // Abrimos el archivo adecuado según el estado de 'isNameCorrect'
+            InputStream is = getAssets().open(fileName);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                message.append(line).append("\n");
+            }
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return message.toString();
+    }
+
+    private void showPlanDialog() {
+        String message = loadMessageBasedOnFlag(); // Cargar el mensaje dependiendo del flag
+
+        // Crear un AlertDialog para mostrar el mensaje
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Plan");
+
+        // Usamos un ScrollView para que el mensaje largo sea desplazable
+        ScrollView scrollView = new ScrollView(this);
+        TextView textView = new TextView(this);
+        textView.setText(message);
+        textView.setPadding(20, 20, 20, 20); // Optional, to give some padding to the text
+        scrollView.addView(textView);
+
+        builder.setView(scrollView); // Establecemos el ScrollView en el AlertDialog
+
+        builder.setPositiveButton("Aceptar", (dialog, which) -> {
+            // Puedes agregar aquí alguna lógica si es necesario
+        });
+
+        builder.show();
+    }
+
+    public void showPlansFragment() {
+        // Crear una nueva instancia del fragmento PlansFragment
+        PlansFragment plansFragment = new PlansFragment();
+
+        // Crear un Bundle para pasar el valor de 'isNameCorrect'
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("isNameCorrect", isNameCorrect); // Aquí pasamos el valor de isNameCorrect
+        plansFragment.setArguments(bundle);
+
+        // Realizar la transacción para reemplazar el fragmento actual
+        getSupportFragmentManager()
+                .beginTransaction()
+                .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.fade_out)
+                .replace(R.id.fragmentContainer, plansFragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
+
     private void mostrarNotificacionDeLogro() {
 
         // Check for permission first
