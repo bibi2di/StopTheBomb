@@ -11,11 +11,11 @@ Te encuentras en un avión de la escuadra nuclear de combate del general de la f
 - [x] Todas las actividades (o la mayoría)
 - [x] RecyclerView + CardView
 - [x] Layouts
-- [ ] BBDD
+- [x] BBDD
 - [x] Diálogos
 - [x] Noficaciones locales
 - [ ] Lógica del juego (a medias)
-- [ ] Control de pila de actividades
+- [x] Control de pila de actividades
   
 - [x] Fragments, orientaciones
 - [x] Idiomas
