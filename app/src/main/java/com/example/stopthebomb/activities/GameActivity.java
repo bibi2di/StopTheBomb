@@ -32,6 +32,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.stopthebomb.MyApplication;
+import com.example.stopthebomb.adapters.CodeAdapter;
+import com.example.stopthebomb.database.DatabaseHelper;
 import com.example.stopthebomb.fragments.DrawerFragment;
 import com.example.stopthebomb.fragments.PlansFragment;
 import com.example.stopthebomb.fragments.RadarFragment;
@@ -82,28 +84,33 @@ public class GameActivity extends BaseActivity {
 
     }
 
-    private void initializeViews(){
+    private void initializeViews() {
         tvScore = findViewById(R.id.tvScore);
         rvCodePanel = findViewById(R.id.rvCodePanel);
         rvNumberPanel = findViewById(R.id.rvNumberPanel);
     }
 
-    private void setupButtons(){
+    private void setupButtons() {
         Button btnBack = findViewById(R.id.btnBack);
         Button btnRadar = findViewById(R.id.btnRadar);
         Button btnRadio = findViewById(R.id.btnRadio);
         Button btnCajon = findViewById(R.id.btnCajon);
 
         btnBack.setOnClickListener(v -> finish());
-        btnRadar.setOnClickListener(v -> openRadarFragment());
+        btnRadar.setOnClickListener(v -> {
+            openRadarFragment();
+            gameViewModel.pauseInactivityTimer();
+        });
 
         btnRadio.setOnClickListener(v -> {
             Toast.makeText(this, "Radio sintonizada", Toast.LENGTH_SHORT).show();
+            gameViewModel.pauseInactivityTimer();
         });
 
         btnCajon.setOnClickListener(v -> {
             Toast.makeText(this, "Cajón abierto", Toast.LENGTH_SHORT).show();
             showFragment();
+            gameViewModel.pauseInactivityTimer();
         });
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
@@ -123,7 +130,7 @@ public class GameActivity extends BaseActivity {
 
     }
 
-    private void setupObservers(){
+    private void setupObservers() {
         gameViewModel.getInactivityStatus().observe(this, isInactive -> {
             if (isInactive) {
                 // Mostrar el mensaje de inactividad (por ejemplo, un diálogo)
@@ -156,7 +163,6 @@ public class GameActivity extends BaseActivity {
                 .addToBackStack(null) // Si quieres que el fragmento sea apilable
                 .commit();
     }
-
 
 
     private void checkNumberCombination(List<NumberCard> numberCards) {
@@ -235,19 +241,17 @@ public class GameActivity extends BaseActivity {
         return message.toString();
     }
 
-    private void setupRecyclerViews(){
-        codeAdapter = new CodeAdapter(gameViewModel.getCodeCards().getValue());
+    private void setupRecyclerViews() {
+        codeAdapter = new CodeAdapter(gameViewModel.getCodeCards().getValue(), gameViewModel);
         rvCodePanel.setLayoutManager(new LinearLayoutManager(this));
         rvCodePanel.setAdapter(codeAdapter);
 
-        //numberAdapter = new NumberAdapter(gameViewModel.getNumberCards().getValue(), this);
         numberAdapter = new NumberAdapter(gameViewModel.getNumberCards().getValue(), gameViewModel);
-
         rvNumberPanel.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         rvNumberPanel.setAdapter(numberAdapter);
     }
 
-    private void showFragment(){
+    private void showFragment() {
         FrameLayout fragmentContainer = findViewById(R.id.fragmentContainer);
         fragmentContainer.setVisibility(View.VISIBLE); // Make container visible
 
@@ -284,6 +288,7 @@ public class GameActivity extends BaseActivity {
         showNextDialog(dialogues, 0);  // Mostrar el primer diálogo
     }
 
+
     private void showNextDialog(List<String> dialogues, int index) {
         if (index >= dialogues.size()) {
             return;  // No hay más diálogos
@@ -303,17 +308,24 @@ public class GameActivity extends BaseActivity {
     }
 
     private void showInactivityDialog() {
+        // Unlock the "Patient Master" ending in the database
+        DatabaseHelper dbHelper = DatabaseHelper.getInstance(this);
+        dbHelper.discoverEnding(1); // Assuming ID 1 is the "Patient Master" ending
+
         new AlertDialog.Builder(this)
-                .setTitle("¡Has ganado!")
-                .setMessage("Nadie ha tocado nada en 2 minutos. ¡Eres el maestro de la paciencia!")
+                .setTitle("Teniente Rogers")
+                .setMessage("Hmmmm, veo que me has hecho caso. Enhorabuena cadete, siga por este camino y llegará muy lejos...")
                 .setPositiveButton("Aceptar", (dialog, which) -> {
                     // Lógica para finalizar el juego o mostrar el WinnerBoard
                     finish(); // O redirigir a la pantalla del WinnerBoard
                 })
                 .setCancelable(false)
                 .show();
+
+        // Show notification and unlock achievement
         mostrarNotificacionDeLogro();
     }
+
 
     private String loadMessageBasedOnFlag() {
         // El archivo que se cargará dependiendo del estado de 'isNameCorrect'
@@ -378,7 +390,6 @@ public class GameActivity extends BaseActivity {
 
 
     private void mostrarNotificacionDeLogro() {
-
         // Check for permission first
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
@@ -386,30 +397,28 @@ public class GameActivity extends BaseActivity {
                 return;
             }
         }
-        // Crear un intent para cuando se haga clic en la notificación (puede abrir una actividad o hacer otra acción)
-        Intent intent = new Intent(this, MainActivity.class); // O la actividad que prefieras
+
+        // Unlock the achievement in the database
+        DatabaseHelper dbHelper = DatabaseHelper.getInstance(this);
+        dbHelper.unlockAchievement(1); // Assuming ID 1 is the "Listen to Lieutenant" achievement
+
+        // Create an intent for when the notification is clicked
+        Intent intent = new Intent(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
 
-        // Crear la notificación con el ícono del logro
+        // Create the notification with the achievement icon
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, MyApplication.CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_final1) // Icono del logro (debe estar en res/drawable)
+                .setSmallIcon(R.drawable.ic_final1)
                 .setContentTitle("Logro Desbloqueado")
                 .setContentText("Has hecho caso al teniente")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setContentIntent(pendingIntent) // Abre la actividad al hacer clic
+                .setContentIntent(pendingIntent)
                 .setAutoCancel(true);
 
-        // Mostrar la notificación
+        // Show the notification
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-        //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-          //  if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-            //    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1);
-              //  return;
-           // }
-        //}
-
         notificationManager.notify(1, builder.build());
     }
 
@@ -435,80 +444,8 @@ public class GameActivity extends BaseActivity {
         // Notificar al ViewModel que la actividad ha salido del primer plano
         gameViewModel.onPause();
     }
-
+}
     // CodeCard model class
 
 
     // RecyclerView Adapter
-    public class CodeAdapter extends RecyclerView.Adapter<CodeAdapter.CodeViewHolder> {
-        private List<CodeCard> cards;
-
-        public CodeAdapter(List<CodeCard> cards) {
-            this.cards = cards;
-        }
-
-        @NonNull
-        @Override
-        public CodeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_code_card, parent, false);
-            return new CodeViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull CodeViewHolder holder, int position) {
-            CodeCard card = cards.get(position);
-            holder.bind(card, position);
-        }
-
-        @Override
-        public int getItemCount() {
-            return cards.size();
-        }
-
-        // ViewHolder class
-        public class CodeViewHolder extends RecyclerView.ViewHolder {
-            private TextView tvLetter;
-            private Button btnUp, btnDown;
-
-            public CodeViewHolder(@NonNull View itemView) {
-                super(itemView);
-                tvLetter = itemView.findViewById(R.id.tvLetter);
-                btnUp = itemView.findViewById(R.id.btnUp);
-                btnDown = itemView.findViewById(R.id.btnDown);
-            }
-
-            public void bind(CodeCard card, int position) {
-                // Set current letter
-                tvLetter.setText(card.getLetter());
-
-                // Up button logic
-                btnUp.setOnClickListener(v -> {
-                    char currentLetter = card.getLetter().charAt(0);
-                    char newLetter = (char) (currentLetter == 'Z' ? 'A' : currentLetter + 1);
-                    card.setLetter(String.valueOf(newLetter));
-                    tvLetter.setText(card.getLetter());
-
-                    // Decrease score for changing letter
-                    //score--;
-                    //updateScore();
-                    //showRandomPenalty();
-                });
-
-                // Down button logic
-                btnDown.setOnClickListener(v -> {
-                    char currentLetter = card.getLetter().charAt(0);
-                    char newLetter = (char) (currentLetter == 'A' ? 'Z' : currentLetter - 1);
-                    card.setLetter(String.valueOf(newLetter));
-                    tvLetter.setText(card.getLetter());
-
-                    // Decrease score for changing letter
-                    //score--;
-                    //updateScore();
-                    //showRandomPenalty();
-                });
-            }
-        }
-    }
-
-}

@@ -19,6 +19,8 @@ public class GameViewModel extends ViewModel {
     private Handler inactivityHandler = new Handler();
     private Runnable inactivityRunnable = this::onInactivityTimeout;
 
+    private boolean isTimerRunning = false; // Indicador de si el temporizador está en ejecución
+
     public GameViewModel() {
         initializeCodeCards();
         initializeNumberCards();
@@ -65,6 +67,7 @@ public class GameViewModel extends ViewModel {
             numberCardsList.set(position, updatedCard);  // Modify the list
             numberCards.setValue(numberCardsList);  // Notify observers about the change
         }
+        pauseInactivityTimer();  // Pausa el temporizador al tocar algo
     }
 
 
@@ -88,7 +91,12 @@ public class GameViewModel extends ViewModel {
 
     // Llamado cuando la actividad entra al primer plano
     public void onResume() {
-        resetInactivityTimer();
+        if (!isTimerRunning) startInactivityTimer();  // Si el temporizador no está corriendo, se inicia
+    }
+
+    private void startInactivityTimer() {
+        inactivityHandler.postDelayed(inactivityRunnable, INACTIVITY_TIME_LIMIT);  // Empieza el temporizador
+        isTimerRunning = true; // Establece que el temporizador está corriendo
     }
 
     // Llamado cuando la actividad sale al segundo plano
@@ -101,6 +109,11 @@ public class GameViewModel extends ViewModel {
         inactivityHandler.removeCallbacks(inactivityRunnable); // Detiene el temporizador anterior
         inactivityHandler.postDelayed(inactivityRunnable, INACTIVITY_TIME_LIMIT); // Reinicia el temporizador
         isInactive.setValue(false); // Restablece el estado de inactividad
+    }
+
+    public void pauseInactivityTimer() {
+        inactivityHandler.removeCallbacks(inactivityRunnable); // Detener el temporizador si se toca algo
+        isTimerRunning = false; // Establece que el temporizador está detenido
     }
 
     // Lógica cuando el tiempo de inactividad se ha alcanzado

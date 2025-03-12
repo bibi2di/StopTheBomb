@@ -9,18 +9,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.stopthebomb.R;
-import com.example.stopthebomb.adapters.EquationAdapter;
-import com.example.stopthebomb.adapters.ImageAdapter;
-import com.example.stopthebomb.models.CardItem;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class RadarFragment extends Fragment {
 

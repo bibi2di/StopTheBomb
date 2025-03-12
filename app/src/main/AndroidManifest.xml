@@ -31,7 +31,7 @@
         </activity>
         <activity android:name=".activities.GameActivity"
                   android:configChanges="locale|layoutDirection|orientation|screenSize|keyboardHidden"/>
-        <activity android:name=".activities.WinnerBoardActivity"
+        <activity android:name=".activities.AchievementsActivity"
                   android:configChanges="locale|layoutDirection"
             />
         <activity
@@ -42,8 +42,9 @@
                 android:value=".activities.MainActivity" />
         </activity>
 
-        <activity android:name=".activities.TutorialActivity"
+        <activity android:name=".activities.EndingsActivity"
                   android:configChanges="locale|layoutDirection"/>
+
 
     </application>
 

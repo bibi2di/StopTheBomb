@@ -10,13 +10,9 @@ import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.preference.Preference;
 import androidx.preference.PreferenceManager;
 
 import com.example.stopthebomb.R;
@@ -53,7 +49,7 @@ public class MainActivity extends BaseActivity {
         });
 
         btnWinnerBoard.setOnClickListener(v -> {
-            Intent winnerBoardIntent = new Intent(MainActivity.this, WinnerBoardActivity.class);
+            Intent winnerBoardIntent = new Intent(MainActivity.this, AchievementsActivity.class);
             startActivity(winnerBoardIntent);
         });
 
@@ -63,7 +59,7 @@ public class MainActivity extends BaseActivity {
         });
 
         btnTutorial.setOnClickListener(v -> {
-            Intent tutorialIntent = new Intent(MainActivity.this, TutorialActivity.class);
+            Intent tutorialIntent = new Intent(MainActivity.this, EndingsActivity.class);
             startActivity(tutorialIntent);
         });
     }

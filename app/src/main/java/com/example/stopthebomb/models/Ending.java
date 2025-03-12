@@ -12,6 +12,15 @@ public class Ending {
         // Default constructor
     }
 
+    public Ending(int id, String name, String description, String imageResource, boolean discovered, String discoveredDate) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.imageResource = imageResource;
+        this.discovered = discovered;
+        this.discoveredDate = discoveredDate;
+    }
+
     @Override
     public String toString() {
         return name + (discovered ? " (Discovered)" : " (????)");
