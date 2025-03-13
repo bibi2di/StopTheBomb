@@ -1,6 +1,8 @@
 package com.example.stopthebomb.activities;
 
 import android.Manifest;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,7 +13,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.ImageView;
 
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.preference.PreferenceManager;
 
@@ -30,6 +34,8 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+
         cargarPreferencias();
         configurarListenerPreferencias();
 
@@ -38,9 +44,9 @@ public class MainActivity extends BaseActivity {
 
         // Inicializar botones:
         Button btnPlay = findViewById(R.id.btnPlay);
-        Button btnWinnerBoard = findViewById(R.id.btnWinnerBoard);
+        Button btnWinnerBoard = findViewById(R.id.btnAchievements);
         Button btnSettings = findViewById(R.id.btnSettings);
-        Button btnTutorial = findViewById(R.id.btnTutorial);
+        Button btnTutorial = findViewById(R.id.btnFinales);
 
         // Set click listeners
         btnPlay.setOnClickListener(v -> {
@@ -62,6 +68,14 @@ public class MainActivity extends BaseActivity {
             Intent tutorialIntent = new Intent(MainActivity.this, EndingsActivity.class);
             startActivity(tutorialIntent);
         });
+
+        ImageView bgAtomBomb = findViewById(R.id.bgAtomBomb);
+        ObjectAnimator animator = ObjectAnimator.ofFloat(bgAtomBomb, "translationY", -50f, 50f);
+        animator.setDuration(3000);
+        animator.setRepeatCount(ValueAnimator.INFINITE);
+        animator.setRepeatMode(ValueAnimator.REVERSE);
+        animator.start();
+
     }
 
     private void solicitarPermisoNotificaciones() {
@@ -96,11 +110,7 @@ public class MainActivity extends BaseActivity {
         String language = prefs.getString("language_preference", "es");
         Locale locale = new Locale(language);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            configuration.setLocale(locale);
-        } else {
-            configuration.locale = locale;
-        }
+        configuration.setLocale(locale);
 
         return context.createConfigurationContext(configuration);
     }
@@ -109,10 +119,19 @@ public class MainActivity extends BaseActivity {
         String idioma = sharedPreferences.getString("language_preference", "es");
         boolean sonidoActivo = sharedPreferences.getBoolean("sound_preference", true);
         boolean vibracionActiva = sharedPreferences.getBoolean("vibration_preference", true);
+        boolean darkModeActivo = sharedPreferences.getBoolean("dark_mode", false); // Nuevo
+
 
         Log.d("Preferencias", "Idioma: " + idioma);
         Log.d("Preferencias", "Sonido Activo: " + sonidoActivo);
         Log.d("Preferencias", "Vibración Activa: " + vibracionActiva);
+        Log.d("Preferencias", "Modo Oscuro: " + darkModeActivo);
+
+        if (darkModeActivo) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
     }
 
     private void configurarListenerPreferencias() {
@@ -131,9 +150,25 @@ public class MainActivity extends BaseActivity {
                 Log.d("Preferencias", "Vibración Activa: " + vibracionActiva);
                 // Apply vibration settings
             }
+            else if (key.equals("dark_mode")) { // Nuevo
+                boolean darkModeActivo = sharedPreferences.getBoolean(key, false);
+                Log.d("Preferencias", "Modo Oscuro Activado: " + darkModeActivo);
+                aplicarModoOscuro(darkModeActivo);
+            }
         };
 
         sharedPreferences.registerOnSharedPreferenceChangeListener(preferenceChangeListener);
+    }
+
+    private void aplicarModoOscuro(boolean activar) {
+        if (activar) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+
+        // Reiniciar actividad para aplicar cambios en UI
+        recreate();
     }
 
     @Override

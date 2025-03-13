@@ -9,7 +9,7 @@
     android:layout_gravity="center"
     android:layout_marginTop="40dp"
     android:padding="16dp"
-    android:backgroundTint="@color/light_green">
+    android:backgroundTint="@color/id">
 
     <!-- Contenido de la tarjeta -->
     <LinearLayout

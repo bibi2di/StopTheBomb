@@ -2,9 +2,9 @@
     <!--MAIN-->
     <string name="app_name">Stop The Bomb</string>
     <string name="playButton">Jokatu</string>
-    <string name="historial">Lorpenak eta Amaierak</string>
+    <string name="historial">Lorpenak</string>
     <string name="conf">Ezarpenak</string>
-    <string name="tutorial">Argibideak</string>
+    <string name="finales">Amaierak</string>
     <string name="atras">Atzera</string>
 
     <!--CONF-->

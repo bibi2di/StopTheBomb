@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- Fondo de la tarjeta -->
-    <solid android:color="@color/light_green"/>
+    <solid android:color="@color/id"/>
 
     <!-- Bordes redondeados -->
     <corners android:radius="16dp"/>

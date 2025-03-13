@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.preference.CheckBoxPreference;
@@ -16,6 +17,7 @@ import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
+import androidx.preference.SwitchPreferenceCompat;
 
 import com.example.stopthebomb.MyApplication;
 import com.example.stopthebomb.R;
@@ -61,6 +63,22 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 });
             }
         }
+        SwitchPreferenceCompat darkModePreference = findPreference("dark_mode");
+        if (darkModePreference != null) {
+            darkModePreference.setOnPreferenceChangeListener((preference, newValue) -> {
+                boolean isDarkModeEnabled = (boolean) newValue;
+
+                // Save preference
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean("dark_mode", isDarkModeEnabled);
+                editor.apply();
+
+                // Apply theme change
+                applyDarkMode(isDarkModeEnabled);
+
+                return true;
+            });
+        }
     }
 
     private void updateLocale(String languageCode) {
@@ -74,6 +92,20 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             ((MyApplication) getActivity().getApplication()).setLocale(languageCode);
         }
     }
+
+    private void applyDarkMode(boolean enableDarkMode) {
+        if (enableDarkMode) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+
+        // Restart activity to apply the theme change
+        if (getActivity() != null) {
+            getActivity().recreate();
+        }
+    }
+
 
     // Method to restart the app to apply language change fully
     private void restartApp() {

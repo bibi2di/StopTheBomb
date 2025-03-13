@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="id">#03381A</color>
+    <!-- Dark theme colors -->
+    <color name="colorPrimary">#9C27B0</color> <!-- Purple -->
+    <color name="colorPrimaryVariant">#6A0080</color> <!-- Darker Purple -->
+    <color name="colorOnPrimary">#FFFFFF</color> <!-- White text on primary color -->
+    <color name="colorSecondary">#FF4081</color> <!-- Pink -->
+    <color name="colorOnSecondary">#000000</color> <!-- Black text on secondary color -->
+
+    <!-- Background color for dark mode -->
+    <color name="background">#F2420A42</color> <!-- Dark blackish background -->
+
+    <!-- Button styles -->
+    <color name="button_background">#9C27B0</color> <!-- Purple Button -->
+    <color name="button_text">#FFFFFF</color> <!-- White Button Text -->
+
+    <!-- Text colors -->
+    <color name="text">#E0E0E0</color> <!-- Light gray text for readability -->
+</resources>

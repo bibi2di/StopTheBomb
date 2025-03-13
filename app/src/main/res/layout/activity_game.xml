@@ -66,57 +66,34 @@
                 android:gravity="center"
                 android:layout_marginBottom="16dp">
 
-                <!-- Aquí van las tarjetas de los botones -->
-                <androidx.cardview.widget.CardView
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:layout_margin="8dp"
-                    app:cardCornerRadius="40dp"
-                    app:cardElevation="4dp">
-
                     <Button
                         android:id="@+id/btnRadar"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:text="Radar"
-                        android:background="@drawable/circular_button"
+                        style="@style/ButtonStyle"
+                        android:layout_marginEnd="8dp"
                         android:textColor="#FFFFFF" />
-                </androidx.cardview.widget.CardView>
-
-                <!-- Resto de los botones -->
-                <androidx.cardview.widget.CardView
-                    android:layout_width="120dp"
-                    android:layout_height="60dp"
-                    android:layout_margin="8dp"
-                    app:cardCornerRadius="8dp"
-                    app:cardElevation="4dp"
-                    app:cardBackgroundColor="#FF5722">
 
                     <Button
                         android:id="@+id/btnRadio"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:text="Radio"
-                        android:background="?attr/selectableItemBackground"
+                        style="@style/ButtonStyle"
+                        android:layout_marginEnd="8dp"
                         android:textColor="#FFFFFF" />
-                </androidx.cardview.widget.CardView>
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:layout_margin="8dp"
-                    app:cardCornerRadius="0dp"
-                    app:cardElevation="4dp"
-                    app:cardBackgroundColor="#4CAF50">
 
                     <Button
                         android:id="@+id/btnCajon"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:text="Cajón"
-                        android:background="?attr/selectableItemBackground"
+                        style="@style/ButtonStyle"
                         android:textColor="#FFFFFF" />
-                </androidx.cardview.widget.CardView>
 
             </LinearLayout>
         </LinearLayout>

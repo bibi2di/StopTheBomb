@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <resources>
 
+    <!-- Base application theme for dark mode -->
     <style name="Theme.MyApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Customize dark mode theme here -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
         <item name="colorOnPrimary">@color/colorOnPrimary</item>
@@ -10,15 +13,15 @@
         <item name="android:windowBackground">@color/background</item> <!-- Dark background -->
     </style>
 
-
+    <!-- Customize button styles for dark mode -->
     <style name="ButtonStyle" parent="Widget.MaterialComponents.Button">
-        <item name="android:backgroundTint">@color/colorPrimary</item>
+        <item name="android:backgroundTint">@color/button_background</item>
         <item name="android:textColor">@color/button_text</item>
     </style>
 
+    <!-- TextView styles -->
     <style name="TextViewStyle" parent="TextAppearance.AppCompat">
         <item name="android:textColor">@color/text</item>
     </style>
-
 
 </resources>

@@ -27,6 +27,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -49,6 +50,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -98,7 +100,7 @@ public class GameActivity extends BaseActivity {
 
         btnBack.setOnClickListener(v -> finish());
         btnRadar.setOnClickListener(v -> {
-            openRadarFragment();
+            showFragment("radar");
             gameViewModel.pauseInactivityTimer();
         });
 
@@ -108,8 +110,8 @@ public class GameActivity extends BaseActivity {
         });
 
         btnCajon.setOnClickListener(v -> {
-            Toast.makeText(this, "Cajón abierto", Toast.LENGTH_SHORT).show();
-            showFragment();
+            //Toast.makeText(this, "Cajón abierto", Toast.LENGTH_SHORT).show();
+            showFragment("drawer");
             gameViewModel.pauseInactivityTimer();
         });
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -156,12 +158,29 @@ public class GameActivity extends BaseActivity {
 
     }
 
-    public void openRadarFragment() {
-        RadarFragment radarFragment = new RadarFragment();
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragmentContainer, radarFragment)
-                .addToBackStack(null) // Si quieres que el fragmento sea apilable
-                .commit();
+    private void showFragment(String type) {
+        FrameLayout fragmentContainer = findViewById(R.id.fragmentContainer);
+        fragmentContainer.setVisibility(View.VISIBLE); // Make container visible
+
+        if (Objects.equals(type, "drawer")) {
+            DrawerFragment drawerFragment = new DrawerFragment();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.fade_out)
+                    .replace(R.id.fragmentContainer, drawerFragment)
+                    .addToBackStack(null)
+                    .commit();
+        }
+        else if (Objects.equals(type, "radar")){
+            RadarFragment radarFragment = new RadarFragment();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.fade_out)
+                    .replace(R.id.fragmentContainer, radarFragment)
+                    .addToBackStack(null) // Si quieres que el fragmento sea apilable
+                    .commit();
+
+        }
     }
 
 
@@ -251,17 +270,6 @@ public class GameActivity extends BaseActivity {
         rvNumberPanel.setAdapter(numberAdapter);
     }
 
-    private void showFragment() {
-        FrameLayout fragmentContainer = findViewById(R.id.fragmentContainer);
-        fragmentContainer.setVisibility(View.VISIBLE); // Make container visible
-
-        getSupportFragmentManager()
-                .beginTransaction()
-                .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.fade_out)
-                .replace(R.id.fragmentContainer, new DrawerFragment())
-                .addToBackStack(null)
-                .commit();
-    }
 
 
     private List<String> loadDialogues() {

@@ -108,7 +108,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             addAchievement(new Achievement(2, "Identidad descubierta", "Resulta que sabes hablar ruso", "ic_final1", 10, false, null));
             addAchievement(new Achievement(3, "Pacifista", "Desviación de la bomba exitosa", "ic_final1", 10, false, null));
             addAchievement(new Achievement(4, "T.J. Kong", "¡Cabalga esa bomba!", "ic_final1", 10, false, null));
-            addAchievement(new Achievement(5, "Genocida", "Esto te pasa por hacerles caso a los imperialistas", "ic_final1", 10, false, null));
+            addAchievement(new Achievement(5, "Ruta desviada", "No se atreverán a bombardear este otro sitio, ¿verdad?", "ic_final1", 10, false, null));
+            addAchievement(new Achievement(6, "Genocida", "Esto te pasa por hacerles caso a los imperialistas", "ic_final1", 10, false, null));
+            addAchievement(new Achievement(7, "Genocida", "Esto te pasa por hacerles caso a los imperialistas", "ic_final1", 10, false, null));
 
         }
     }

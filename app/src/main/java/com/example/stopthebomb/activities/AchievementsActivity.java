@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -26,6 +27,7 @@ public class AchievementsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_achievements);
+
 
         // Initialize the RecyclerView
         recyclerView = findViewById(R.id.achievements_recycler_view);
@@ -50,6 +52,9 @@ public class AchievementsActivity extends AppCompatActivity {
         // Display total points
         int totalPoints = dbHelper.getTotalAchievementPoints();
         totalPointsTextView.setText("Total Points: " + totalPoints);
+
+        Button btnBackToMain = findViewById(R.id.btnBackToMain);
+        btnBackToMain.setOnClickListener(v -> finish());
     }
 
     // Adapter for the Achievements RecyclerView

@@ -13,7 +13,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/tutorial"
+            android:text="@string/finales"
             android:textColor="#ECF0F1"
             android:textSize="24sp"
             android:gravity="center"

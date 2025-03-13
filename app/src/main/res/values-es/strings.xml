@@ -2,9 +2,9 @@
     <!--MAIN-->
     <string name="app_name">Stop The Bomb</string>
     <string name="playButton">Jugar</string>
-    <string name="historial">Logros y finales</string>
+    <string name="historial">Logros</string>
     <string name="conf">Configuración</string>
-    <string name="tutorial">Tutorial</string>
+    <string name="finales">Finales</string>
     <string name="atras">Atrás</string>
 
     <!--CONF-->

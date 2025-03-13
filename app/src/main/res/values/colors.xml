@@ -2,6 +2,23 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="light_green">#A8D5BA</color>
+    <color name="id">#A8D5BA</color>
     <color name="card_border">#B0BEC5</color>
+
+    <!-- Light theme colors -->
+    <color name="colorPrimary">#15203A</color> <!-- Muted, soft blue -->
+    <color name="colorPrimaryVariant">#357ABD</color> <!-- Slightly darker shade of blue -->
+    <color name="colorOnPrimary">#FFFFFF</color> <!-- White text or icons on primary color -->
+    <color name="colorSecondary">#6CB9FF</color> <!-- Soft, pastel blue -->
+    <color name="colorOnSecondary">#FFFFFF</color> <!-- White text or icons on secondary color -->
+
+    <!-- Background color for light mode -->
+    <color name="background">#C97BFFF5</color> <!-- Light, airy blue background -->
+
+    <!-- Button styles -->
+    <color name="button_background">#5E97F6</color> <!-- Muted blue for buttons -->
+    <color name="button_text">#FFFFFF</color> <!-- White text on buttons -->
+
+    <!-- Text colors -->
+    <color name="text">#00154B</color> <!-- Dark, neutral blue-gray for text -->
 </resources>
