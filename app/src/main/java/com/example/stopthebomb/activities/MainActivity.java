@@ -44,17 +44,19 @@ public class MainActivity extends BaseActivity {
 
         // Inicializar botones:
         Button btnPlay = findViewById(R.id.btnPlay);
-        Button btnWinnerBoard = findViewById(R.id.btnAchievements);
+        Button btnAchievements = findViewById(R.id.btnAchievements);
         Button btnSettings = findViewById(R.id.btnSettings);
         Button btnTutorial = findViewById(R.id.btnFinales);
+        Button btnComments = findViewById(R.id.btnComments);
 
         // Set click listeners
         btnPlay.setOnClickListener(v -> {
             Intent gameIntent = new Intent(MainActivity.this, GameActivity.class);
+            gameIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(gameIntent);
         });
 
-        btnWinnerBoard.setOnClickListener(v -> {
+        btnAchievements.setOnClickListener(v -> {
             Intent winnerBoardIntent = new Intent(MainActivity.this, AchievementsActivity.class);
             startActivity(winnerBoardIntent);
         });
@@ -63,6 +65,12 @@ public class MainActivity extends BaseActivity {
             Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(settingsIntent);
         });
+
+        btnComments.setOnClickListener(v -> {
+            Intent commentsIntent = new Intent(MainActivity.this, CommentsActivity.class);
+            startActivity(commentsIntent);
+        });
+
 
         btnTutorial.setOnClickListener(v -> {
             Intent tutorialIntent = new Intent(MainActivity.this, EndingsActivity.class);
@@ -83,7 +91,6 @@ public class MainActivity extends BaseActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1);
-                return;
             }
         }
     }
@@ -179,14 +186,3 @@ public class MainActivity extends BaseActivity {
         }
     }
 }
-    /*private void applySavedLanguage() {
-        SharedPreferences sharedPreferences = getSharedPreferences("GameSettings", MODE_PRIVATE);
-        String selectedLanguage = sharedPreferences.getString("selectedLanguage", "es");
-
-        Locale locale = new Locale(selectedLanguage);
-        Locale.setDefault(locale);
-        Configuration config = new Configuration();
-        config.setLocale(locale);
-
-        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
-    }*/

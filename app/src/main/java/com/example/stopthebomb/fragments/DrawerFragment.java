@@ -22,7 +22,6 @@ public class DrawerFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_drawer, container, false);
 
         Button btnIdCard = view.findViewById(R.id.btnIdCard);
-        Button btnInstructions = view.findViewById(R.id.btnInstructions);
         Button btnPlans = view.findViewById(R.id.btnPlans);
         Button btnClose = view.findViewById(R.id.btnClose);
 

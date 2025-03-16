@@ -1,5 +1,7 @@
 package com.example.stopthebomb.activities;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +17,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.stopthebomb.R;
 import com.example.stopthebomb.database.DatabaseHelper;
 import com.example.stopthebomb.models.Ending;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import android.os.Handler;
+import android.os.Looper;
+
+
 
 import java.util.List;
 
@@ -22,6 +30,8 @@ public class EndingsActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private EndingsAdapter adapter;
     private TextView discoveredCountTextView;
+    private ExecutorService executorService;
+    private Handler uiHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,32 +45,43 @@ public class EndingsActivity extends AppCompatActivity {
         // Initialize discovered count TextView
         discoveredCountTextView = findViewById(R.id.discovered_count_text_view);
 
+        executorService = Executors.newSingleThreadExecutor();
+        uiHandler = new Handler(Looper.getMainLooper());
+
         // Get database helper
-        DatabaseHelper dbHelper = DatabaseHelper.getInstance(this);
-
+        //DatabaseHelper dbHelper = DatabaseHelper.getInstance(this);
+        loadEndings();
         // Initialize default endings if needed
-        dbHelper.initDefaultEndings();
-
-        // Get all endings
-        List<Ending> endings = dbHelper.getAllEndings();
-
-        // Set up adapter
-        adapter = new EndingsAdapter(endings);
-        recyclerView.setAdapter(adapter);
-
-        // Display discovered count
-        int discoveredCount = 0;
-        for (Ending ending : endings) {
-            if (ending.discovered) {
-                discoveredCount++;
-            }
-        }
-        discoveredCountTextView.setText("Discovered: " + discoveredCount + "/" + endings.size());
-
         Button btnBackToMain = findViewById(R.id.btnBackToMain);
         btnBackToMain.setOnClickListener(v -> finish());
 
     }
+
+    private void loadEndings() {
+        executorService.execute(() -> {
+            DatabaseHelper dbHelper = DatabaseHelper.getInstance(this);
+            dbHelper.initDefaultEndings(); // Asegurar inicialización
+
+            List<Ending> endings = dbHelper.getAllEndings(); // Obtener finales de la BD
+
+            // Contar descubiertos
+            int discoveredCount = 0;
+            for (Ending ending : endings) {
+                if (ending.discovered) {
+                    discoveredCount++;
+                }
+            }
+
+            // Actualizar UI en el hilo principal
+            int finalDiscoveredCount = discoveredCount;
+            uiHandler.post(() -> {
+                adapter = new EndingsAdapter(endings);
+                recyclerView.setAdapter(adapter);
+                discoveredCountTextView.setText("Discovered: " + finalDiscoveredCount + "/" + endings.size());
+            });
+        });
+    }
+
 
     // Adapter for the Endings RecyclerView
     private class EndingsAdapter extends RecyclerView.Adapter<EndingsAdapter.ViewHolder> {

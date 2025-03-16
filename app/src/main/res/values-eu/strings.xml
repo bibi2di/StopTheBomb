@@ -36,4 +36,36 @@
     <!-- LOGROS -->
     <string name="progress_title">Progreso</string>
     <string name="score_format">hola</string>
+
+    <!-- ID -->
+    <string name="id_label">ID:</string>
+    <string name="nationality_label">Nazionalitatea:</string>
+    <string name="name_label">Izena:</string>
+    <string name="lastname_label">Abizena:</string>
+    <string name="birthday_label">Jaioteguna:</string>
+    <string name="warning" />
+    <string name="progress_lost">Se perderá todo el progreso</string>
+    <string name="confirm">Confirmar</string>
+    <string name="no">No</string>
+    <string name="talkative">La tabarra que me estás dando, virgen santísima</string>
+    <string name="nod">Asentir</string>
+    <string name="tennant">Teniente Rogers</string>
+    <string name="bye">Adiós</string>
+    <string name="ending_discovered">Final descubierto</string>
+    <string name="obedient">Obediente</string>
+    <string name="onemore">Una vez más</string>
+    <string name="cowboy">Encuentras un sombre de cowboy, ¿lo coges?</string>
+    <string name="yes">Sí</string>
+    <string name="accept">Aceptar</string>
+    <string name="radio_synth">Radio sintonizada</string>
+    <string name="codes">Códigos</string>
+    <string name="transmissions">Transmisiones</string>
+    <string name="correct_freq">¡Frecuencia correcta!</string>
+    <string name="all_units">A todas las unidades</string>
+    <string name="validatePlanR">El Plan R ha sido validado. Desbloquear:</string>
+    <string name="send">Enviar</string>
+    <string name="hidden_name">Introduce el nombre oculto:</string>
+    <string name="incorrect_name">Nombre incorrecto, inténtalo de nuevo</string>
+    <string name="cancel">Cancelar</string>
+    <string name="enhorabuena_end">Veo que me ha obedecido a la perfección, cadete. Enhorabuena. Llegará muy lejos.</string>
 </resources>

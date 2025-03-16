@@ -20,5 +20,6 @@
     <color name="button_text">#FFFFFF</color> <!-- White text on buttons -->
 
     <!-- Text colors -->
-    <color name="text">#00154B</color> <!-- Dark, neutral blue-gray for text -->
+    <color name="text">#00154B</color>
+    <color name="red">#BF2F23</color> <!-- Dark, neutral blue-gray for text -->
 </resources>

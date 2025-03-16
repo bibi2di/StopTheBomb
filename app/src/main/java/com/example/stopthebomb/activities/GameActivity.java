@@ -1,47 +1,41 @@
 package com.example.stopthebomb.activities;
 
+import static android.app.PendingIntent.getActivity;
+
 import android.Manifest;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.text.InputType;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ScrollView;
-import android.widget.TextView;
 import android.widget.Toast;
-import android.os.Handler;
 
 import androidx.activity.OnBackPressedCallback;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.stopthebomb.MyApplication;
+import com.example.stopthebomb.NotificationHelper;
 import com.example.stopthebomb.adapters.CodeAdapter;
 import com.example.stopthebomb.database.DatabaseHelper;
 import com.example.stopthebomb.fragments.DrawerFragment;
 import com.example.stopthebomb.fragments.PlansFragment;
 import com.example.stopthebomb.fragments.RadarFragment;
-import com.example.stopthebomb.models.CodeCard;
+import com.example.stopthebomb.models.Achievement;
 import com.example.stopthebomb.adapters.NumberAdapter;
 import com.example.stopthebomb.models.GameViewModel;
-import com.example.stopthebomb.models.NumberCard;
 import com.example.stopthebomb.R;
 
 import java.io.BufferedReader;
@@ -51,43 +45,45 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Random;
-import java.util.stream.Collectors;
 
 public class GameActivity extends BaseActivity {
     private GameViewModel gameViewModel;
-    private TextView tvScore;
     private RecyclerView rvCodePanel;
     private RecyclerView rvNumberPanel;
     private CodeAdapter codeAdapter;
     private NumberAdapter numberAdapter;
-
-    private boolean isNameCorrect;
-
+    private DatabaseHelper dbHelper;
+    private AlertDialog activeDialog;
+    private NotificationHelper notificationHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+        dbHelper = DatabaseHelper.getInstance(this);
+        notificationHelper = new NotificationHelper();
 
-        // Inicializar vistas:
+        // Initialize views
         initializeViews();
-        // Inicializar botones:
-        setupButtons();
-        // Inicializar ViewModel:
-        gameViewModel = new ViewModelProvider(this).get(GameViewModel.class);
-        // Configurar observers:
-        setupObservers();
-        // Inicializar RecyclerViews:
-        setupRecyclerViews();
-        // Mostrar diálogos:
-        showDialogsSequentially();
-        isNameCorrect = false;
 
+        // Initialize ViewModel
+        gameViewModel = new ViewModelProvider(this).get(GameViewModel.class);
+
+        // Setup buttons
+        setupButtons();
+
+        // Configure observers
+        setupObservers();
+
+        // Initialize RecyclerViews
+        setupRecyclerViews();
+
+        // Load and show dialogs
+        gameViewModel.loadDialogues(this);
+        showDialogsSequentially();
     }
 
     private void initializeViews() {
-        tvScore = findViewById(R.id.tvScore);
         rvCodePanel = findViewById(R.id.rvCodePanel);
         rvNumberPanel = findViewById(R.id.rvNumberPanel);
     }
@@ -97,50 +93,133 @@ public class GameActivity extends BaseActivity {
         Button btnRadar = findViewById(R.id.btnRadar);
         Button btnRadio = findViewById(R.id.btnRadio);
         Button btnCajon = findViewById(R.id.btnCajon);
+        Button btnAchievements = findViewById(R.id.btnAchievements);
+        Button btnAction = findViewById(R.id.btnAction);
 
-        btnBack.setOnClickListener(v -> finish());
+        btnBack.setOnClickListener(v -> {
+            new AlertDialog.Builder(this)
+                    .setTitle(getString(R.string.warning))
+                    .setMessage(getString(R.string.progress_lost))
+                    .setPositiveButton(getString(R.string.confirm), (dialog, which) -> finish())
+                    .setNegativeButton(getString(R.string.no), (dialog, which) -> dialog.dismiss())
+                    .show();
+        });
+
         btnRadar.setOnClickListener(v -> {
             showFragment("radar");
             gameViewModel.pauseInactivityTimer();
         });
 
         btnRadio.setOnClickListener(v -> {
-            Toast.makeText(this, "Radio sintonizada", Toast.LENGTH_SHORT).show();
+            if (gameViewModel.isCodeMatching("EFG")) {
+                // Show special message when code is EFG
+                Toast.makeText(this, getString(R.string.correct_freq), Toast.LENGTH_SHORT).show();
+                new AlertDialog.Builder(this)
+                        .setTitle(getString(R.string.all_units))
+                        .setMessage(getString(R.string.validatePlanR) + ": 7294")
+                        .setPositiveButton(getString(R.string.accept), (dialog, which) -> {
+                            // Logic can be added if needed
+                        })
+                        .show();
+            } else {
+                // Show original message
+                Toast.makeText(this, getString(R.string.radio_synth), Toast.LENGTH_SHORT).show();
+                new AlertDialog.Builder(this)
+                        .setTitle(getString(R.string.codes))
+                        .setMessage(getString(R.string.transmissions)+ ": EFG")
+                        .setPositiveButton(getString(R.string.accept), (dialog, which) -> {})
+                        .show();
+            }
             gameViewModel.pauseInactivityTimer();
         });
 
         btnCajon.setOnClickListener(v -> {
-            //Toast.makeText(this, "Cajón abierto", Toast.LENGTH_SHORT).show();
             showFragment("drawer");
             gameViewModel.pauseInactivityTimer();
         });
+
+        btnAchievements.setOnClickListener(v -> {
+            Intent achievementsIntent = new Intent(GameActivity.this, AchievementsActivity.class);
+            startActivity(achievementsIntent);
+        });
+
+        btnAction.setOnClickListener(v -> {
+            if (btnAction.getText().equals("JUMP")) {
+                gameViewModel.discoverEnding(3);
+                gameViewModel.unlockAchievement(3);
+                new AlertDialog.Builder(this)
+                        .setMessage(getString(R.string.ending_discovered)+": LoveBomb")
+                        .setPositiveButton(getString(R.string.accept), (dialog, which) -> {
+                            finish();
+                        })
+                        .show();
+            } else {
+                Vibrator vibrator = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
+                if (vibrator != null && vibrator.hasVibrator()) {
+                    vibrator.vibrate(300); // Vibrate for 300 milliseconds
+                }
+
+                // Use ViewModel to handle bomb click count logic
+
+                int bombClickCount = gameViewModel.getBombClickCount();
+                gameViewModel.incrementBombClickCount();
+
+                switch (bombClickCount) {
+                    case 1:
+                        // First click
+                        new AlertDialog.Builder(this)
+                                .setMessage(getString(R.string.cowboy))
+                                .setPositiveButton(getString(R.string.yes), (dialog, which) -> {
+                                    gameViewModel.unlockAchievement(4);
+                                    Toast.makeText(this, "Yeeha!", Toast.LENGTH_SHORT).show();
+                                })
+                                .setNegativeButton(getString(R.string.no), null)
+                                .show();
+                        break;
+
+                    case 2:
+                        // Second click
+                        new AlertDialog.Builder(this)
+                                .setMessage(getString(R.string.onemore))
+                                .setPositiveButton("OK", null)
+                                .show();
+                        break;
+
+                    case 3:
+                        // Third click - unlock ending and achievements
+                        gameViewModel.discoverEnding(2);
+                        gameViewModel.unlockAchievement(6);
+                        new AlertDialog.Builder(this)
+                                .setMessage(getString(R.string.ending_discovered)+ ": D.M.A")
+                                .setPositiveButton(getString(R.string.accept), (dialog, which) -> {
+                                    finish();
+                                })
+                                .show();
+
+                        break;
+                }
+            }
+        });
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
                 @Override
                 public void handleOnBackPressed() {
-                    // Aquí defines la lógica que quieres cuando el usuario presione atrás
                     if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-                        // Si hay fragmentos en la pila de retroceso, se hace pop
                         getSupportFragmentManager().popBackStack();
                     } else {
-                        // Si no, se llama a finish para cerrar la actividad
                         finish();
                     }
                 }
             });
         }
-
     }
 
     private void setupObservers() {
         gameViewModel.getInactivityStatus().observe(this, isInactive -> {
             if (isInactive) {
-                // Mostrar el mensaje de inactividad (por ejemplo, un diálogo)
                 showInactivityDialog();
             }
-        });
-        gameViewModel.getScore().observe(this, score -> {
-            tvScore.setText("Score: " + score);
         });
 
         gameViewModel.getCodeCards().observe(this, codeCards -> {
@@ -148,19 +227,51 @@ public class GameActivity extends BaseActivity {
         });
 
         gameViewModel.getNumberCards().observe(this, numberCards -> {
-            numberAdapter.notifyItemChanged(numberCards.size() - 1);
-            Log.d("GameActivity", "Numbers updated: " + numberCards);
-
-            if (numberCards.size() == 5) {
-                checkNumberCombination(numberCards);
+            if (numberCards.size() == 4) {
+                // Let ViewModel check the sequence instead
+                gameViewModel.checkNumberSequence();
             }
         });
 
+        gameViewModel.getAchievementUnlocked().observe(this, id -> {
+            if (id != null) {
+                if (dbHelper.unlockAchievement(id)) {
+                    Achievement achievement = dbHelper.getAllAchievements().get(id - 1);
+                    notificationHelper.showAchievementNotification(this, achievement);
+                }
+            }
+        });
+
+        gameViewModel.getEndingDiscovered().observe(this, id -> {
+            if (id != null) {
+                dbHelper.discoverEnding(id);
+            }
+        });
+
+        gameViewModel.getShowNameInputDialog().observe(this, shouldShow -> {
+            if (shouldShow) {
+                showNameInputDialog();
+            }
+        });
+
+        gameViewModel.getDialogToShow().observe(this, dialogText -> {
+            showDialog(dialogText);
+        });
+
+        gameViewModel.getHiddenMessage().observe(this, message -> {
+            showSecretDialog(message);
+        });
+
+        gameViewModel.getAchievementToNotify().observe(this, achievement -> {
+            if (achievement != null) {
+                notificationHelper.showAchievementNotification(this, achievement);
+            }
+        });
     }
 
     private void showFragment(String type) {
         FrameLayout fragmentContainer = findViewById(R.id.fragmentContainer);
-        fragmentContainer.setVisibility(View.VISIBLE); // Make container visible
+        fragmentContainer.setVisibility(View.VISIBLE);
 
         if (Objects.equals(type, "drawer")) {
             DrawerFragment drawerFragment = new DrawerFragment();
@@ -171,79 +282,54 @@ public class GameActivity extends BaseActivity {
                     .addToBackStack(null)
                     .commit();
         }
-        else if (Objects.equals(type, "radar")){
+        else if (Objects.equals(type, "radar")) {
             RadarFragment radarFragment = new RadarFragment();
             getSupportFragmentManager()
                     .beginTransaction()
                     .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.fade_out)
                     .replace(R.id.fragmentContainer, radarFragment)
-                    .addToBackStack(null) // Si quieres que el fragmento sea apilable
+                    .addToBackStack(null)
                     .commit();
-
         }
     }
-
-
-    private void checkNumberCombination(List<NumberCard> numberCards) {
-        StringBuilder enteredCode = new StringBuilder();
-
-        Log.d("GameActivity", "Checking entered numbers:");
-        for (NumberCard card : numberCards) {
-            Log.d("GameActivity", "Number: " + card.getNumber());
-            enteredCode.append(card.getNumber());
-        }
-
-        Log.d("GameActivity", "Final entered code: " + enteredCode.toString());
-
-        if (enteredCode.toString().equals("34582")) {
-            Log.d("GameActivity", "Code matched! Showing dialog...");
-            showNameInputDialog();
-        }
-    }
-
 
     private void showNameInputDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Introduce el nombre oculto:");
+        builder.setTitle(getString(R.string.hidden_name));
 
-        // Create an EditText field
+        // Create EditText
         final EditText input = new EditText(this);
         input.setInputType(InputType.TYPE_CLASS_TEXT);
         builder.setView(input);
 
-        // Set up the submit button
-        builder.setPositiveButton("Enviar", (dialog, which) -> {
+        builder.setPositiveButton(getString(R.string.send), (dialog, which) -> {
             String enteredName = input.getText().toString().trim();
 
-            // Validate name (case insensitive)
-            if (enteredName.equalsIgnoreCase("Stanley")) {
-                showSecretDialog(); // Show next dialog if correct
-                isNameCorrect = true;
-            } else {
-                Toast.makeText(this, "Nombre incorrecto. Intenta de nuevo.", Toast.LENGTH_SHORT).show();
+            // Use ViewModel to validate name
+            gameViewModel.validateName(enteredName);
+
+            if (!enteredName.equalsIgnoreCase("Stanley")) {
+                Toast.makeText(this, getString(R.string.incorrect_name), Toast.LENGTH_SHORT).show();
             }
         });
 
-        builder.setNegativeButton("Cancelar", (dialog, which) -> dialog.cancel());
+        builder.setNegativeButton(getString(R.string.cancel), (dialog, which) -> dialog.cancel());
+        builder.show();
+    }
 
+    private void showSecretDialog(String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Mensaje Secreto");
+        builder.setMessage(message);
+        builder.setPositiveButton("Aceptar", (dialog, which) -> {});
         builder.show();
     }
 
     private void showSecretDialog() {
         String hiddenMessage = loadHiddenMessage(); // Load text from file
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Mensaje Secreto");
-        builder.setMessage(hiddenMessage);
-
-        builder.setPositiveButton("Aceptar", (dialog, which) -> {
-            // You can add additional logic here if needed
-        });
-
-        builder.show();
+        showSecretDialog(hiddenMessage);
     }
 
-    // Method to read the hidden message from assets
     private String loadHiddenMessage() {
         StringBuilder message = new StringBuilder();
         try {
@@ -270,17 +356,60 @@ public class GameActivity extends BaseActivity {
         rvNumberPanel.setAdapter(numberAdapter);
     }
 
+    private void showDialog(String dialogText) {
+        if (isFinishing() || isDestroyed()) return;
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.tennant));
+        builder.setMessage(dialogText);
+
+        builder.setPositiveButton(getString(R.string.nod), (dialog, which) -> {
+            // Continuar al siguiente diálogo.
+            gameViewModel.showNextDialog();
+        });
+        // Botón con el texto largo
+        builder.setNeutralButton(getString(R.string.talkative),
+                (dialog, which) -> {
+                    // Acción cuando se presiona el botón
+                    endDialog();
+                    gameViewModel.unlockAchievement(7);
+                });
+        // Store reference to dismiss if needed
+        activeDialog = builder.create();
+        activeDialog.show();
+    }
+
+    private void endDialog() {
+        if (isFinishing() || isDestroyed()) return;
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.tennant));
+        builder.setMessage("...");
+        builder.setPositiveButton(getString(R.string.bye), (dialog, which) -> {
+            dialog.dismiss();
+        });
+
+        AlertDialog longMessageDialog = builder.create();
+        longMessageDialog.show();
+    }
+
+
+    private void showDialogsSequentially() {
+        List<String> dialogues = loadDialogues();
+        if (!dialogues.isEmpty()) {
+            showDialog(dialogues.get(0));
+        }
+    }
 
     private List<String> loadDialogues() {
         List<String> dialogues = new ArrayList<>();
         try {
-            // Abrir el archivo de texto dentro de la carpeta "assets"
+            // Open the text file in the "assets" folder
             InputStream is = getAssets().open("dialogs.txt");
             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
             String line;
 
-            // Leer todas las líneas del archivo y añadirlas a la lista de diálogos
+            // Read all lines from the file and add them to the dialogues list
             while ((line = reader.readLine()) != null) {
                 dialogues.add(line);
             }
@@ -291,103 +420,38 @@ public class GameActivity extends BaseActivity {
         return dialogues;
     }
 
-    private void showDialogsSequentially() {
-        List<String> dialogues = loadDialogues();  // Cargar los diálogos desde el archivo
-        showNextDialog(dialogues, 0);  // Mostrar el primer diálogo
-    }
-
-
-    private void showNextDialog(List<String> dialogues, int index) {
-        if (index >= dialogues.size()) {
-            return;  // No hay más diálogos
-        }
-
-        String dialogText = dialogues.get(index);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Teniente Rogers");
-        builder.setMessage(dialogText);
-
-        builder.setPositiveButton("Asentir", (dialog, which) -> {
-            showNextDialog(dialogues, index + 1);  // Mostrar el siguiente diálogo
-        });
-
-        builder.create().show();  // Mostrar el diálogo
-    }
-
     private void showInactivityDialog() {
-        // Unlock the "Patient Master" ending in the database
+        // Final 1, achievement 1
         DatabaseHelper dbHelper = DatabaseHelper.getInstance(this);
-        dbHelper.discoverEnding(1); // Assuming ID 1 is the "Patient Master" ending
-
+        dbHelper.discoverEnding(1);
+        if (dbHelper.unlockAchievement(1)) {
+            Achievement achievement = dbHelper.getAllAchievements().get(0);
+            notificationHelper.showAchievementNotification(this, achievement);
+        }
         new AlertDialog.Builder(this)
-                .setTitle("Teniente Rogers")
-                .setMessage("Hmmmm, veo que me has hecho caso. Enhorabuena cadete, siga por este camino y llegará muy lejos...")
-                .setPositiveButton("Aceptar", (dialog, which) -> {
-                    // Lógica para finalizar el juego o mostrar el WinnerBoard
-                    finish(); // O redirigir a la pantalla del WinnerBoard
-                })
+                .setTitle(getString(R.string.tennant))
+                .setMessage(getString(R.string.enhorabuena_end))
+                .setPositiveButton(getString(R.string.nod), null)
                 .setCancelable(false)
                 .show();
-
-        // Show notification and unlock achievement
-        mostrarNotificacionDeLogro();
-    }
-
-
-    private String loadMessageBasedOnFlag() {
-        // El archivo que se cargará dependiendo del estado de 'isNameCorrect'
-        String fileName = isNameCorrect ? "file_unlocked.txt" : "file_russian.txt";
-
-        StringBuilder message = new StringBuilder();
-        try {
-            // Abrimos el archivo adecuado según el estado de 'isNameCorrect'
-            InputStream is = getAssets().open(fileName);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                message.append(line).append("\n");
-            }
-            reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return message.toString();
-    }
-
-    private void showPlanDialog() {
-        String message = loadMessageBasedOnFlag(); // Cargar el mensaje dependiendo del flag
-
-        // Crear un AlertDialog para mostrar el mensaje
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Plan");
-
-        // Usamos un ScrollView para que el mensaje largo sea desplazable
-        ScrollView scrollView = new ScrollView(this);
-        TextView textView = new TextView(this);
-        textView.setText(message);
-        textView.setPadding(20, 20, 20, 20); // Optional, to give some padding to the text
-        scrollView.addView(textView);
-
-        builder.setView(scrollView); // Establecemos el ScrollView en el AlertDialog
-
-        builder.setPositiveButton("Aceptar", (dialog, which) -> {
-            // Puedes agregar aquí alguna lógica si es necesario
-        });
-
-        builder.show();
+        new AlertDialog.Builder(this)
+                .setMessage(getString(R.string.ending_discovered) +": "+ getString(R.string.obedient))
+                .setPositiveButton(getString(R.string.accept), (dialog, which) -> {
+                    finish();
+                })
+                .show();
     }
 
     public void showPlansFragment() {
-        // Crear una nueva instancia del fragmento PlansFragment
+        // Create a new instance of PlansFragment
         PlansFragment plansFragment = new PlansFragment();
 
-        // Crear un Bundle para pasar el valor de 'isNameCorrect'
+        // Create a Bundle to pass the value of 'isNameCorrect'
         Bundle bundle = new Bundle();
-        bundle.putBoolean("isNameCorrect", isNameCorrect); // Aquí pasamos el valor de isNameCorrect
+        bundle.putBoolean("isNameCorrect", gameViewModel.isNameCorrect()); // Use ViewModel for this value
         plansFragment.setArguments(bundle);
 
-        // Realizar la transacción para reemplazar el fragmento actual
+        // Perform the transaction to replace the current fragment
         getSupportFragmentManager()
                 .beginTransaction()
                 .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.fade_out)
@@ -396,64 +460,25 @@ public class GameActivity extends BaseActivity {
                 .commit();
     }
 
-
-    private void mostrarNotificacionDeLogro() {
-        // Check for permission first
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1);
-                return;
-            }
-        }
-
-        // Unlock the achievement in the database
-        DatabaseHelper dbHelper = DatabaseHelper.getInstance(this);
-        dbHelper.unlockAchievement(1); // Assuming ID 1 is the "Listen to Lieutenant" achievement
-
-        // Create an intent for when the notification is clicked
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
-
-        // Create the notification with the achievement icon
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, MyApplication.CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_final1)
-                .setContentTitle("Logro Desbloqueado")
-                .setContentText("Has hecho caso al teniente")
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setContentIntent(pendingIntent)
-                .setAutoCancel(true);
-
-        // Show the notification
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-        notificationManager.notify(1, builder.build());
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 1 && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            mostrarNotificacionDeLogro();
-
-        }
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
-        // Notificar al ViewModel que la actividad ha vuelto al primer plano
+        // Notify ViewModel that activity has returned to foreground
         gameViewModel.onResume();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        // Notificar al ViewModel que la actividad ha salido del primer plano
+        // Notify ViewModel that activity has left foreground
         gameViewModel.onPause();
     }
+
+    @Override
+    protected void onDestroy() {
+        if (activeDialog != null && activeDialog.isShowing()) {
+            activeDialog.dismiss();
+        }
+        super.onDestroy();
+    }
 }
-    // CodeCard model class
-
-
-    // RecyclerView Adapter

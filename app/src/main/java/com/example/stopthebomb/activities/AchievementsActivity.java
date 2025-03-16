@@ -1,6 +1,8 @@
 package com.example.stopthebomb.activities;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.stopthebomb.R;
 import com.example.stopthebomb.database.DatabaseHelper;
 import com.example.stopthebomb.models.Achievement;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import java.util.List;
 
@@ -22,6 +26,9 @@ public class AchievementsActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private AchievementsAdapter adapter;
     private TextView totalPointsTextView;
+    private ExecutorService executorService;
+    private Handler uiHandler;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,25 +44,39 @@ public class AchievementsActivity extends AppCompatActivity {
         totalPointsTextView = findViewById(R.id.total_points_text_view);
 
         // Get database helper
-        DatabaseHelper dbHelper = DatabaseHelper.getInstance(this);
+        executorService = Executors.newSingleThreadExecutor();
 
         // Initialize default achievements if needed
-        dbHelper.initDefaultAchievements();
+        uiHandler = new Handler(Looper.getMainLooper());
+        loadAchievementsAndTotalPoints();
 
-        // Get all achievements
-        List<Achievement> achievements = dbHelper.getAllAchievements();
-
-        // Set up adapter
-        adapter = new AchievementsAdapter(achievements);
-        recyclerView.setAdapter(adapter);
-
-        // Display total points
-        int totalPoints = dbHelper.getTotalAchievementPoints();
-        totalPointsTextView.setText("Total Points: " + totalPoints);
 
         Button btnBackToMain = findViewById(R.id.btnBackToMain);
         btnBackToMain.setOnClickListener(v -> finish());
     }
+
+    private void loadAchievementsAndTotalPoints() {
+        executorService.execute(() -> {
+            DatabaseHelper dbHelper = DatabaseHelper.getInstance(this);
+            dbHelper.initDefaultAchievements();
+            // Get all achievements in the background
+            List<Achievement> achievements = dbHelper.getAllAchievements();
+            // Get all achievements
+
+            int totalPoints = dbHelper.getTotalAchievementPoints();
+
+            // Update the UI on the main thread
+            runOnUiThread(() -> {
+                // Set up adapter
+                adapter = new AchievementsAdapter(achievements);
+                recyclerView.setAdapter(adapter);
+
+                // Display total points
+                totalPointsTextView.setText("Total Points: " + totalPoints);
+            });
+        });
+    }
+
 
     // Adapter for the Achievements RecyclerView
     private class AchievementsAdapter extends RecyclerView.Adapter<AchievementsAdapter.ViewHolder> {
@@ -96,8 +117,11 @@ public class AchievementsActivity extends AppCompatActivity {
                 holder.dateTextView.setText("Unlocked: " + achievement.unlockedDate);
                 holder.dateTextView.setVisibility(View.VISIBLE);
             } else {
+                // Show placeholder for undiscovered endings
+                holder.nameTextView.setText("????");
+                holder.descriptionTextView.setText("This achievement hasn't been unlocked");
+                holder.dateTextView.setText("");
                 holder.lockedOverlayView.setVisibility(View.VISIBLE);
-                holder.dateTextView.setVisibility(View.GONE);
             }
         }
 

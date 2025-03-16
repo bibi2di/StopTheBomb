@@ -1,0 +1,3 @@
+Bombardeo nuclear: AUTORIZADO
+Objetivo: Localización ajustada en RADAR
+Ejecución: introducir destino y comprobar estado de bomba.

@@ -1,5 +1,6 @@
 package com.example.stopthebomb.fragments;
 
+import android.content.res.ColorStateList;
 import android.location.Address;
 import android.location.Geocoder;
 import android.content.Intent;
@@ -15,9 +16,10 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.stopthebomb.R;
-import com.example.stopthebomb.database.DatabaseHelper;
+import com.example.stopthebomb.models.GameViewModel;
 
 import java.io.IOException;
 import java.util.List;
@@ -30,6 +32,8 @@ public class RadarFragment extends Fragment {
     private Button btnEstablecerDestino;
     private EditText editDestino;
 
+    private GameViewModel gameViewModel;
+
     public RadarFragment() {
         // Required empty public constructor
     }
@@ -39,7 +43,7 @@ public class RadarFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflar el layout del fragmento
         View rootView = inflater.inflate(R.layout.fragment_radar, container, false);
-
+        gameViewModel = new ViewModelProvider(requireActivity()).get(GameViewModel.class);
         // Referencias a los elementos del layout
         btnLocalizacion = rootView.findViewById(R.id.btnLocalizacion);
         btnEstablecerDestino = rootView.findViewById(R.id.btnEstablecerDestino);
@@ -70,30 +74,44 @@ public class RadarFragment extends Fragment {
     // Función para abrir Google Maps con una dirección personalizada
     private void abrirDestinoIntroducido() {
         String direccion = editDestino.getText().toString().trim();
-
+        Button btnAction = getActivity().findViewById(R.id.btnAction);
         if (!direccion.isEmpty()) {
-            if (direccion.equalsIgnoreCase("Kremlin") || direccion.equalsIgnoreCase("Moscú")) {
-                // Si la dirección es Kremlin o Moscú, mostrar el Toast correspondiente
+            if (direccion.equalsIgnoreCase("Kremlin") || direccion.equalsIgnoreCase("Moscú")
+                    || direccion.equalsIgnoreCase("Moscu")) {
+                // Configure as Bomb button
+                btnAction.setText("BOMB");
+                btnAction.setVisibility(View.VISIBLE);
+                // You might want to change appearance too
+                btnAction.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.red)));
+                // Set the bomb click listener
+                    // Additional bomb functionality here
                 Toast.makeText(getActivity(), "Kremlin establecido", Toast.LENGTH_SHORT).show();
-            } else {
-                // Aquí verificamos la distancia con la ubicación predefinida
-                Location ubicacionPredefinida = new Location("predefinedLocation");
-                ubicacionPredefinida.setLatitude(LATITUD_UBICACION_PREDEFINIDA);
-                ubicacionPredefinida.setLongitude(LONGITUD_UBICACION_PREDEFINIDA);
+            } else{
+                    // Aquí verificamos la distancia con la ubicación predefinida
+                    Location ubicacionPredefinida = new Location("predefinedLocation");
+                    ubicacionPredefinida.setLatitude(LATITUD_UBICACION_PREDEFINIDA);
+                    ubicacionPredefinida.setLongitude(LONGITUD_UBICACION_PREDEFINIDA);
 
-                // Obtener la distancia entre la ubicación predefinida y la dirección introducida
-                float distancia = calcularDistancia(ubicacionPredefinida, direccion);
-                if (distancia > 5000) {
-                    Toast.makeText(getActivity(), "Destino desviado", Toast.LENGTH_SHORT).show();
-                    // Unlock the achievement in the database
-                    DatabaseHelper dbHelper = DatabaseHelper.getInstance(getContext());
-                    dbHelper.unlockAchievement(5);
-                } else {
-                    Toast.makeText(getActivity(), "Destino no válido", Toast.LENGTH_SHORT).show();
+                    // Obtener la distancia entre la ubicación predefinida y la dirección introducida
+                    float distancia = calcularDistancia(ubicacionPredefinida, direccion);
+                    if (distancia > 5000) {
+                        Toast.makeText(getActivity(), "Destino desviado", Toast.LENGTH_SHORT).show();
+                        // Unlock the achievement in the database
+                        //DatabaseHelper dbHelper = DatabaseHelper.getInstance(getContext());
+                        //dbHelper.unlockAchievement(5);
+                        gameViewModel.unlockAchievement(5);
+                        if (getActivity() != null) {
+                            btnAction.setText("JUMP");
+                            btnAction.setVisibility(View.VISIBLE);  // Make the "JUMP" button visible
+                        }
 
+                    } else {
+                        Toast.makeText(getActivity(), "Destino no válido", Toast.LENGTH_SHORT).show();
+
+                    }
                 }
             }
-        } else {
+         else {
             // Si no se introduce una dirección válida, mostrar un mensaje
             editDestino.setError("Por favor, ingresa una dirección.");
         }

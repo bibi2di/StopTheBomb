@@ -87,7 +87,19 @@
                 android:layout_height="48dp"
                 android:text="@string/conf"
                 style="@style/ButtonStyle"
+                android:layout_marginBottom="8dp"
                 app:layout_constraintTop_toBottomOf="@id/btnFinales"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="@id/btnComments"/>
+
+            <Button
+                android:id="@+id/btnComments"
+                android:layout_width="200dp"
+                android:layout_height="48dp"
+                android:text="Comentarios"
+                style="@style/ButtonStyle"
+                app:layout_constraintTop_toBottomOf="@id/btnSettings"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>

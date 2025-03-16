@@ -24,4 +24,25 @@
         <item name="android:textColor">@color/text</item>
     </style>
 
+    <style name="PreferenceTextStyle">
+        <item name="android:textSize">18sp</item> <!-- Increase text size -->
+        <item name="android:textColor">@color/text</item> <!-- Optional: set text color -->
+    </style>
+
+    <style name="CustomToolbarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <!-- Customize text color -->
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorSecondary">@color/colorOnSecondary</item>
+
+        <item name="android:background">?attr/colorPrimary</item>
+
+        <item name="titleTextAppearance">@style/CustomToolbarTitle</item>
+    </style>
+
+    <style name="CustomToolbarTitle" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/white</item>
+        <!--  <item name="android:fontFamily">@font/custom_font</item>  Optional -->
+    </style>
+
 </resources>

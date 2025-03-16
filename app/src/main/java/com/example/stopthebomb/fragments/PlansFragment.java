@@ -11,8 +11,10 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.stopthebomb.R;
+import com.example.stopthebomb.models.GameViewModel;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -22,6 +24,8 @@ import java.io.InputStreamReader;
 public class PlansFragment extends Fragment {
 
     private boolean isNameCorrect;  // Variable para almacenar el estado
+    private Button btnPlanR;
+    private GameViewModel gameViewModel;
 
     public PlansFragment() {
         // Required empty public constructor
@@ -31,20 +35,31 @@ public class PlansFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflar el layout para este fragmento
         View view = inflater.inflate(R.layout.fragment_plans, container, false);
-
+        gameViewModel = new ViewModelProvider(requireActivity()).get(GameViewModel.class);
         // Recuperamos el valor de isNameCorrect desde los argumentos del fragmento
         if (getArguments() != null) {
             isNameCorrect = getArguments().getBoolean("isNameCorrect", false);
         }
 
         // Referencias a los botones en el layout
-        Button btnPlanR = view.findViewById(R.id.btnPlanR);
+        btnPlanR = view.findViewById(R.id.btnPlanR);
         Button btnPlanL = view.findViewById(R.id.btnPlanL);
         Button btnBack = view.findViewById(R.id.btnBack);
 
+        btnPlanR.setVisibility(View.INVISIBLE);
+
+        // Observe number cards changes to update button visibility
+        gameViewModel.getNumberCards().observe(getViewLifecycleOwner(), numberCards -> {
+            if (gameViewModel.isNumberSequenceMatching("7294")) {
+                btnPlanR.setVisibility(View.VISIBLE);
+                // Optionally unlock an achievement
+                gameViewModel.unlockAchievement(2);
+            }
+        });
+
         // Configurar los listeners para los botones
-        btnPlanR.setOnClickListener(v -> showPlanRDialog());
-        btnPlanL.setOnClickListener(v -> showPlanLDialog());
+        btnPlanR.setOnClickListener(v -> showPlanDialog("PlanR"));
+        btnPlanL.setOnClickListener(v -> showPlanDialog("PlanL"));
 
         btnBack.setOnClickListener(v -> {
             // Volver al fragmento anterior
@@ -54,13 +69,12 @@ public class PlansFragment extends Fragment {
         return view;
     }
 
-    private void showPlanLDialog() {
-        String message = loadMessageBasedOnFlag();  // Cargar el mensaje dependiendo del flag
+    private void showPlanDialog(String planName) {
+        String message = loadMessage(planName);  // Cargar el mensaje dependiendo del flag
 
         // Crear un AlertDialog para mostrar el mensaje
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Plan L");
-
+        builder.setTitle(planName);
         // Usamos un ScrollView para que el mensaje largo sea desplazable
         ScrollView scrollView = new ScrollView(getContext());
         TextView textView = new TextView(getContext());
@@ -70,41 +84,21 @@ public class PlansFragment extends Fragment {
 
         builder.setView(scrollView);  // Establecemos el ScrollView en el AlertDialog
 
-        builder.setPositiveButton("Aceptar", (dialog, which) -> {
+        builder.setPositiveButton(getString(R.string.accept), (dialog, which) -> {
             // Puedes agregar aquí alguna lógica si es necesario
         });
 
         builder.show();
     }
 
-    private void showPlanRDialog() {
-        //String message = loadMessageBasedOnFlag();  // Cargar el mensaje dependiendo del flag
-
-        // Crear un AlertDialog para mostrar el mensaje
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Plan R");
-
-        // Usamos un ScrollView para que el mensaje largo sea desplazable
-        ScrollView scrollView = new ScrollView(getContext());
-        TextView textView = new TextView(getContext());
-        textView.setText("aaaaaaaaaaaaa");
-        textView.setPadding(20, 20, 20, 20);  // Optional, to give some padding to the text
-        scrollView.addView(textView);
-
-        builder.setView(scrollView);  // Establecemos el ScrollView en el AlertDialog
-
-        builder.setPositiveButton("Aceptar", (dialog, which) -> {
-            // Puedes agregar aquí alguna lógica si es necesario
-        });
-
-        builder.show();
-    }
-
-
-    private String loadMessageBasedOnFlag() {
-        // Determinamos el archivo que se va a cargar dependiendo de 'isNameCorrect'
-        String fileName = isNameCorrect ? "file_unlocked.txt" : "file_russian.txt";
-
+    private String loadMessage(String planName) {
+        String fileName;
+        if (planName.equals("PlanL")) {
+            fileName = isNameCorrect ? "file_unlocked.txt" : "file_russian.txt";
+        }
+        else {
+            fileName = "planR.txt";
+        }
         StringBuilder message = new StringBuilder();
         try {
             // Abrimos el archivo adecuado según el estado de 'isNameCorrect'
@@ -119,6 +113,8 @@ public class PlansFragment extends Fragment {
             e.printStackTrace();
         }
         return message.toString();
+
     }
 }
+
 

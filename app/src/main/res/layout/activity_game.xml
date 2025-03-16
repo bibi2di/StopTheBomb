@@ -5,30 +5,39 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Agregamos un ScrollView para permitir desplazamiento en pantallas pequeñas -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="16dp"
+            android:paddingTop="24dp">
 
-            <TextView
-                android:id="@+id/tvScore"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Score: 0"
-                android:textSize="18sp"
-                android:textAlignment="center" />
+                android:paddingTop="50dp">
 
-            <Button
-                android:id="@+id/btnBack"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/atras" />
+                <Button
+                    android:id="@+id/btnBack"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/atras"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
+                <Button
+                    android:id="@+id/btnAchievements"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/historial"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -37,12 +46,29 @@
                 android:textSize="16sp"
                 android:layout_marginBottom="8dp" />
 
-            <!-- Usamos match_parent para que el RecyclerView ocupe todo el espacio posible -->
+            <!-- Code Panel RecyclerView -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvCodePanel"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
                 android:layout_marginBottom="16dp"/>
+
+            <!-- Space for JUMP button -->
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="60dp"
+                android:layout_marginBottom="16dp">
+
+                <Button
+                    android:id="@+id/btnAction"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="JUMP"
+                    android:layout_gravity="center"
+                    android:visibility="gone"
+                    style="@style/ButtonStyle" />
+            </FrameLayout>
 
             <TextView
                 android:layout_width="match_parent"
@@ -52,11 +78,11 @@
                 android:textSize="16sp"
                 android:layout_marginBottom="8dp" />
 
-            <!-- Similar aquí, definimos un tamaño adecuado -->
+            <!-- Number Panel RecyclerView -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvNumberPanel"
-                android:layout_width="match_parent"
-                android:layout_height="300dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp" />
 
             <LinearLayout
@@ -66,46 +92,45 @@
                 android:gravity="center"
                 android:layout_marginBottom="16dp">
 
-                    <Button
-                        android:id="@+id/btnRadar"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Radar"
-                        style="@style/ButtonStyle"
-                        android:layout_marginEnd="8dp"
-                        android:textColor="#FFFFFF" />
+                <Button
+                    android:id="@+id/btnRadar"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Radar"
+                    style="@style/ButtonStyle"
+                    android:layout_marginEnd="8dp"
+                    />
 
-                    <Button
-                        android:id="@+id/btnRadio"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Radio"
-                        style="@style/ButtonStyle"
-                        android:layout_marginEnd="8dp"
-                        android:textColor="#FFFFFF" />
+                <Button
+                    android:id="@+id/btnRadio"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Radio"
+                    style="@style/ButtonStyle"
+                    android:layout_marginEnd="8dp"
+                    />
 
-                    <Button
-                        android:id="@+id/btnCajon"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Cajón"
-                        style="@style/ButtonStyle"
-                        android:textColor="#FFFFFF" />
-
+                <Button
+                    android:id="@+id/btnCajon"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Cajón"
+                    style="@style/ButtonStyle"
+                    />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
 
-    <!-- El contenedor del fragmento se coloca arriba, pero es invisible hasta ser usado -->
+    <!-- Fragment container that appears on top when visible -->
     <FrameLayout
         android:id="@+id/fragmentContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#CCFFFFFF"
-        android:visibility="gone" /> <!-- Al principio invisible -->
+        android:background="@color/background"
+        android:visibility="gone" /> <!-- Initially invisible -->
 
 </FrameLayout>
 

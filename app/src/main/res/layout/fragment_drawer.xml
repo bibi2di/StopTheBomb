@@ -25,12 +25,6 @@
             android:layout_height="wrap_content"
             android:text="ID Card" />
 
-        <Button
-            android:id="@+id/btnInstructions"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Instructions"
-            android:layout_marginTop="16dp" />
 
         <Button
             android:id="@+id/btnPlans"

@@ -2,82 +2,106 @@
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="24dp"
     app:cardCornerRadius="16dp"
     app:cardElevation="4dp"
-    android:layout_gravity="center"
-    android:layout_marginTop="40dp"
-    android:padding="16dp"
     android:backgroundTint="@color/id">
 
-    <!-- Contenido de la tarjeta -->
+    <!-- Content that adapts to orientation -->
     <LinearLayout
-        android:layout_width="156dp"
-        android:layout_height="350dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="@integer/orientation_layout"
+        android:padding="16dp">
 
-        <!-- Imagen de perfil -->
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/imgProfile"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_gravity="center"
-            android:src="@drawable/ic_profile" />
-
-        <!-- Nombre -->
-        <TextView
-            android:id="@+id/tvName"
+        <!-- Profile image section -->
+        <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="20dp"
-            android:text="Nombre"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:layout_margin="8dp">
 
-        <!-- Apellidos -->
-        <TextView
-            android:id="@+id/tvLastName"
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imgProfile"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_profile"
+                android:contentDescription="Profile picture" />
+        </FrameLayout>
+
+        <!-- Text information section -->
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="10dp"
-            android:text="Apellido"
-            android:textSize="16sp" />
+            android:orientation="vertical"
+            android:layout_margin="8dp">
 
-        <!-- Número de ID -->
-        <TextView
-            android:id="@+id/tvIdNumber"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp"
-            android:text="ID:"
-            android:textSize="16sp" />
+            <!-- Name -->
+            <TextView
+                android:id="@+id/tvName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="8dp"
+                android:text="@string/name_label"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
-        <!-- Nacionalidad -->
-        <TextView
-            android:id="@+id/tvNationality"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp"
-            android:text="Nacionalidad:"
-            android:textSize="16sp" />
+            <!-- Last Name -->
+            <TextView
+                android:id="@+id/tvLastName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="8dp"
+                android:text="@string/lastname_label"
+                android:textSize="16sp" />
 
-        <!-- Botón de atrás -->
-        <Button
-            android:id="@+id/btnBack"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="30dp"
-            android:text="Atrás" />
+            <!-- ID Number -->
+            <TextView
+                android:id="@+id/tvIdNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="8dp"
+                android:text="@string/id_label"
+                android:textSize="16sp" />
 
+            <!-- Nationality -->
+            <TextView
+                android:id="@+id/tvNationality"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="8dp"
+                android:text="@string/nationality_label"
+                android:textSize="16sp" />
+
+            <!-- Nationality -->
+            <TextView
+                android:id="@+id/tvBirth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="8dp"
+                android:text="@string/birthday_label"
+                android:textSize="16sp" />
+
+            <!-- Back Button -->
+            <Button
+                android:id="@+id/btnBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="16dp"
+                android:text="Atrás" />
+        </LinearLayout>
     </LinearLayout>
-
 </androidx.cardview.widget.CardView>
-
 

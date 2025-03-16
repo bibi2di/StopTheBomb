@@ -6,6 +6,7 @@ import android.content.res.Configuration;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Build;
+import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import java.util.Locale;
 
@@ -21,6 +22,10 @@ public class MyApplication extends Application {
         String idioma = sharedPreferences.getString("language_preference", "es");
         setLocale(idioma);
         createNotificationChannel();
+        StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
+                .detectNonSdkApiUsage()
+                .penaltyLog()
+                .build());
     }
 
     // Improved method for changing locale across the app

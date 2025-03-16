@@ -27,21 +27,23 @@ public class IdCardFragment extends Fragment {
         TextView tvLastName = view.findViewById(R.id.tvLastName);
         TextView tvIdNumber = view.findViewById(R.id.tvIdNumber);
         TextView tvNationality = view.findViewById(R.id.tvNationality);
+        TextView tvBirth = view.findViewById(R.id.tvBirth);
         Button btnBack = view.findViewById(R.id.btnBack);
 
-        // Datos ficticios, deberías obtenerlos del modelo o base de datos
         String name = "Andrew";
         String lastName = "Yelnats";
-        String idNumber = "22334";
+        String idNumber = "3458";
         String nationality = "EEUU";
+        String birthday = "12/09/1924";
         int profileImage = R.drawable.ic_profile; // Puedes asignar una imagen específica aquí
 
         // Establecer los valores a las vistas
         imgProfile.setImageResource(profileImage);
-        tvName.setText(name);
-        tvLastName.setText(lastName);
-        tvIdNumber.setText("ID: " + idNumber);
-        tvNationality.setText("Nacionalidad: " + nationality);
+        tvName.setText(getString(R.string.name_label) + " " + name);
+        tvLastName.setText(getString(R.string.lastname_label) + " " +lastName);
+        tvIdNumber.setText(getString(R.string.id_label) + " " + idNumber);
+        tvNationality.setText(getString(R.string.nationality_label) + " " + nationality);
+        tvBirth.setText(getString(R.string.birthday_label) + " " + birthday);
 
         // Acción para el botón Atrás
         btnBack.setOnClickListener(v -> getActivity().getSupportFragmentManager().popBackStack());
