@@ -127,7 +127,7 @@ public class GameViewModel extends ViewModel {
         return isInactive;
     }
 
-    // Called when activity enters foreground
+    //Por si entra en segundo plano:
     public void onResume() {
         if (!isTimerRunning) startInactivityTimer();
     }
@@ -137,7 +137,7 @@ public class GameViewModel extends ViewModel {
         isTimerRunning = true;
     }
 
-    // Called when activity leaves foreground
+
     public void onPause() {
         inactivityHandler.removeCallbacks(inactivityRunnable);
         isTimerRunning = false;
@@ -241,7 +241,7 @@ public class GameViewModel extends ViewModel {
         return isNameCorrect;
     }
 
-    // Expose LiveData
+    // Exponer LiveData:
     public LiveData<String> getDialogToShow() { return dialogToShow; }
     public LiveData<String> getHiddenMessage() { return hiddenMessage; }
     public LiveData<Boolean> getShowNameInputDialog() { return showNameInputDialog; }

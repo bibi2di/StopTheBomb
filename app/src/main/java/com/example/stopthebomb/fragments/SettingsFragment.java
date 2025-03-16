@@ -1,29 +1,20 @@
 package com.example.stopthebomb.fragments;
 
-import android.Manifest;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.content.res.Configuration;
-import android.os.Build;
 import android.os.Bundle;
-import android.widget.Toast;
+
 
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationManagerCompat;
-import androidx.preference.CheckBoxPreference;
 import androidx.preference.ListPreference;
-import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreferenceCompat;
 
-import com.example.stopthebomb.MyApplication;
 import com.example.stopthebomb.R;
 import com.example.stopthebomb.activities.MainActivity;
 
-import java.util.Locale;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
     private SharedPreferences sharedPreferences;
@@ -49,19 +40,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 return true;
             });
 
-            // Configure listener for notification permission toggle
-            CheckBoxPreference notificationPermissionPreference = findPreference("notification_permission");
-            if (notificationPermissionPreference != null) {
-                notificationPermissionPreference.setOnPreferenceChangeListener((preference, newValue) -> {
-                    boolean enableNotifications = (boolean) newValue;
-                    if (enableNotifications) {
-                        requestNotificationPermission();
-                    } else {
-                        disableNotifications();
-                    }
-                    return true;
-                });
-            }
         }
         SwitchPreferenceCompat darkModePreference = findPreference("dark_mode");
         if (darkModePreference != null) {
@@ -87,9 +65,11 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         editor.putString("language_preference", languageCode);
         editor.apply();
 
-        // Apply the locale change to the application
-        if (getActivity() != null && getActivity().getApplication() instanceof MyApplication) {
-            ((MyApplication) getActivity().getApplication()).setLocale(languageCode);
+        // Instead of calling setLocale on MyApplication, recreate the activity
+        if (getActivity() != null) {
+            // Recreate the current activity to apply the locale change
+            // This will trigger attachBaseContext in BaseActivity with the new locale
+            getActivity().recreate();
         }
     }
 
@@ -105,7 +85,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             getActivity().recreate();
         }
     }
-
 
     // Method to restart the app to apply language change fully
     private void restartApp() {
@@ -125,22 +104,4 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         }
     }
 
-    private void requestNotificationPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1);
-            } else {
-                // Notification permission already granted, proceed to enable notifications
-                Toast.makeText(getActivity(), "Notification permission granted!", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    private void disableNotifications() {
-        // Handle the case when notifications are disabled
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getActivity());
-        notificationManager.cancelAll(); // This will cancel all notifications.
-
-        Toast.makeText(getActivity(), "Notifications disabled!", Toast.LENGTH_SHORT).show();
-    }
 }

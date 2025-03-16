@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,7 +21,7 @@ import java.util.concurrent.Executors;
 
 import java.util.List;
 
-public class AchievementsActivity extends AppCompatActivity {
+public class AchievementsActivity extends BaseActivity {
     private RecyclerView recyclerView;
     private AchievementsAdapter adapter;
     private TextView totalPointsTextView;
@@ -114,12 +113,12 @@ public class AchievementsActivity extends AppCompatActivity {
             // Adjust visibility based on whether the achievement is unlocked
             if (achievement.unlocked) {
                 holder.lockedOverlayView.setVisibility(View.GONE);
-                holder.dateTextView.setText("Unlocked: " + achievement.unlockedDate);
+                holder.dateTextView.setText(getString(R.string.unlocked_date, achievement.unlockedDate));
                 holder.dateTextView.setVisibility(View.VISIBLE);
             } else {
                 // Show placeholder for undiscovered endings
                 holder.nameTextView.setText("????");
-                holder.descriptionTextView.setText("This achievement hasn't been unlocked");
+                holder.descriptionTextView.setText(getString(R.string.no_unlocked));
                 holder.dateTextView.setText("");
                 holder.lockedOverlayView.setVisibility(View.VISIBLE);
             }

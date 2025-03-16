@@ -33,8 +33,8 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Configuraciones:
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-
 
         cargarPreferencias();
         configurarListenerPreferencias();
@@ -49,7 +49,7 @@ public class MainActivity extends BaseActivity {
         Button btnTutorial = findViewById(R.id.btnFinales);
         Button btnComments = findViewById(R.id.btnComments);
 
-        // Set click listeners
+        // Listeners:
         btnPlay.setOnClickListener(v -> {
             Intent gameIntent = new Intent(MainActivity.this, GameActivity.class);
             gameIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -87,7 +87,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void solicitarPermisoNotificaciones() {
-        /// Check for permission first
+        // Permisos de notificaciones:
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1);
@@ -95,7 +95,7 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    // Override attachBaseContext to apply saved locale
+    // Aplicar el Locale guardado:
     @Override
     protected void attachBaseContext(Context newBase) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(newBase);
@@ -108,7 +108,7 @@ public class MainActivity extends BaseActivity {
         super.attachBaseContext(context);
     }
 
-    // Helper method to create a configuration context with the user's preferred locale
+    // Crear un context de configuración:
     private Context createConfigurationContext(Context context) {
         Resources resources = context.getResources();
         Configuration configuration = new Configuration(resources.getConfiguration());
@@ -128,7 +128,6 @@ public class MainActivity extends BaseActivity {
         boolean vibracionActiva = sharedPreferences.getBoolean("vibration_preference", true);
         boolean darkModeActivo = sharedPreferences.getBoolean("dark_mode", false); // Nuevo
 
-
         Log.d("Preferencias", "Idioma: " + idioma);
         Log.d("Preferencias", "Sonido Activo: " + sonidoActivo);
         Log.d("Preferencias", "Vibración Activa: " + vibracionActiva);
@@ -146,16 +145,13 @@ public class MainActivity extends BaseActivity {
             if (key.equals("language_preference")) {
                 String nuevoIdioma = sharedPreferences.getString(key, "es");
                 Log.d("Preferencias", "Nuevo Idioma: " + nuevoIdioma);
-                // No need to apply language here as we'll recreate the activity
                 recreate();
             } else if (key.equals("sound_preference")) {
                 boolean sonidoActivo = sharedPreferences.getBoolean(key, true);
                 Log.d("Preferencias", "Sonido Activo: " + sonidoActivo);
-                // Apply sound settings
             } else if (key.equals("vibration_preference")) {
                 boolean vibracionActiva = sharedPreferences.getBoolean(key, true);
                 Log.d("Preferencias", "Vibración Activa: " + vibracionActiva);
-                // Apply vibration settings
             }
             else if (key.equals("dark_mode")) { // Nuevo
                 boolean darkModeActivo = sharedPreferences.getBoolean(key, false);
@@ -173,8 +169,7 @@ public class MainActivity extends BaseActivity {
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
-
-        // Reiniciar actividad para aplicar cambios en UI
+        // Reiniciamos actividad para aplicar los cambios:
         recreate();
     }
 

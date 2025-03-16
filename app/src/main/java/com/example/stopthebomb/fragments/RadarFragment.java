@@ -51,10 +51,10 @@ public class RadarFragment extends Fragment {
         editDestino = rootView.findViewById(R.id.editDestino);
 
         // Acción del botón Localización (abrir ubicación fija)
-        btnLocalizacion.setOnClickListener(v -> abrirUbicacionPredefinida());
+        btnLocalizacion.setOnClickListener(v -> openLocation());
 
         // Acción del botón Establecer Destino (introducir dirección)
-        btnEstablecerDestino.setOnClickListener(v -> abrirDestinoIntroducido());
+        btnEstablecerDestino.setOnClickListener(v -> setDestination());
 
         btnClose.setOnClickListener(v -> closeFragment());
 
@@ -62,7 +62,7 @@ public class RadarFragment extends Fragment {
     }
 
     // Función para abrir Google Maps con una ubicación predefinida
-    private void abrirUbicacionPredefinida() {
+    private void openLocation() {
         // Coordenadas de la Torre Eiffel, por ejemplo
         String location = LATITUD_UBICACION_PREDEFINIDA + "," + LONGITUD_UBICACION_PREDEFINIDA;
         Uri uri = Uri.parse("geo:" + location);
@@ -72,7 +72,7 @@ public class RadarFragment extends Fragment {
     }
 
     // Función para abrir Google Maps con una dirección personalizada
-    private void abrirDestinoIntroducido() {
+    private void setDestination() {
         String direccion = editDestino.getText().toString().trim();
         Button btnAction = getActivity().findViewById(R.id.btnAction);
         if (!direccion.isEmpty()) {
@@ -117,7 +117,7 @@ public class RadarFragment extends Fragment {
         }
     }
 
-    // Método para calcular la distancia entre la ubicación predefinida y la dirección ingresada
+    // Metodo para calcular la distancia entre la ubicación predefinida y la dirección ingresada
     private float calcularDistancia(Location ubicacionPredefinida, String direccion) {
         Geocoder geocoder = new Geocoder(getActivity());
         List<Address> addresses = null;

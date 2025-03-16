@@ -34,7 +34,7 @@
 
         <activity android:name=".activities.GameActivity"
                   android:configChanges="orientation|screenSize"
-                  android:launchMode="singleTask"/> <!-- vuelve a la primera inst.-->
+                  android:launchMode="singleTask"/>
 
         <activity android:name=".activities.AchievementsActivity"
                   android:finishOnTaskLaunch="true"

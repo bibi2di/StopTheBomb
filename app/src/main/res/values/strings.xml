@@ -3,7 +3,6 @@
     <!--MAIN-->
     <string name="app_name">Stop The Bomb</string>
     <string name="playButton">Jugar</string>
-    <string name="historial">Logros</string>
     <string name="conf">Configuración</string>
     <string name="finales">Finales</string>
     <string name="atras">Atrás</string>
@@ -13,11 +12,11 @@
     <string name="vibration">Vibración on/off</string>
     <string name="language">Idioma</string>
     <string name="save">Guardar ajustes</string>
-    <string name="back">Volver al menú principal</string>
+    <string name="back">Atrás</string>
     <string name="settings_saved">¡Ajustes guardados!</string>
     <string name="sum_idioma">Selecciona el idioma de la app</string>
-    <string name="sum_sonido">Activa/desactiva el sonido de la app</string>
-    <string name="sum_vibra">Activa/desactiva la vibración de la app</string>
+    <string name="sum_sonido">Activa el sonido</string>
+    <string name="sum_vibra">Activa la vibración</string>
 
     <!-- Array de idiomas -->
     <string-array name="languages_array">
@@ -50,7 +49,7 @@
     <string name="name_label">Nombre:</string>
     <string name="lastname_label">Apellido:</string>
     <string name="birthday_label">Fecha de nacimiento:</string>
-    <string name="warning" />
+    <string name="warning" >Advertencia</string>
     <string name="progress_lost">Se perderá todo el progreso</string>
     <string name="confirm">Confirmar</string>
     <string name="no">No</string>
@@ -60,7 +59,7 @@
     <string name="bye">Adiós</string>
     <string name="ending_discovered">Final descubierto</string>
     <string name="obedient">Obediente</string>
-    <string name="onemore">Una vez más</string>
+    <string name="onemore">Está atascada...</string>
     <string name="cowboy">Encuentras un sombre de cowboy, ¿lo coges?</string>
     <string name="yes">Sí</string>
     <string name="accept">Aceptar</string>
@@ -75,4 +74,24 @@
     <string name="incorrect_name">Nombre incorrecto, inténtalo de nuevo</string>
     <string name="cancel">Cancelar</string>
     <string name="enhorabuena_end">Veo que me ha obedecido a la perfección, cadete. Enhorabuena. Llegará muy lejos.</string>
+    <string name="unlocked_date">Desbloqueado: %s</string>
+    <string name="no_unlocked">Este logro no ha sido desbloqueado.</string>
+    <string name="comments">Comentarios</string>
+    <string name="achievements">Logros</string>
+    <string name="code_panel">Códigos</string>
+    <string name="jump">JUMP</string>
+    <string name="number_panel">Panel números</string>
+    <string name="radar">Radar</string>
+    <string name="radio">Radio</string>
+    <string name="drawer">Cajón</string>
+    <string name="write_comm">Escribe un comentario...</string>
+    <string name="add_comment">Añade el comentario</string>
+    <string name="discovered">Descubierto</string>
+    <string name="plans">Planes</string>
+    <string name="id_card">Tarjeta de identificación</string>
+    <string name="open_loc">Abrir localización</string>
+    <string name="intro_dest">Introduce una dirección</string>
+    <string name="establish_dest">Establecer destino</string>
+    <string name="ending_not">Este final aún no ha sido descubierto</string>
+
 </resources>

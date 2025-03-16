@@ -1,12 +1,7 @@
 package com.example.stopthebomb.activities;
 
-import static android.app.PendingIntent.getActivity;
-
-import android.Manifest;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -19,14 +14,10 @@ import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AlertDialog;
-import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.stopthebomb.MyApplication;
 import com.example.stopthebomb.NotificationHelper;
 import com.example.stopthebomb.adapters.CodeAdapter;
 import com.example.stopthebomb.database.DatabaseHelper;
@@ -63,22 +54,11 @@ public class GameActivity extends BaseActivity {
         dbHelper = DatabaseHelper.getInstance(this);
         notificationHelper = new NotificationHelper();
 
-        // Initialize views
         initializeViews();
-
-        // Initialize ViewModel
         gameViewModel = new ViewModelProvider(this).get(GameViewModel.class);
-
-        // Setup buttons
         setupButtons();
-
-        // Configure observers
         setupObservers();
-
-        // Initialize RecyclerViews
         setupRecyclerViews();
-
-        // Load and show dialogs
         gameViewModel.loadDialogues(this);
         showDialogsSequentially();
     }
@@ -325,10 +305,6 @@ public class GameActivity extends BaseActivity {
         builder.show();
     }
 
-    private void showSecretDialog() {
-        String hiddenMessage = loadHiddenMessage(); // Load text from file
-        showSecretDialog(hiddenMessage);
-    }
 
     private String loadHiddenMessage() {
         StringBuilder message = new StringBuilder();

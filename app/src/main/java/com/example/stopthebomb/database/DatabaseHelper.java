@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.example.stopthebomb.R;
 import com.example.stopthebomb.models.Achievement;
 import com.example.stopthebomb.models.Comment;
 import com.example.stopthebomb.models.Ending;

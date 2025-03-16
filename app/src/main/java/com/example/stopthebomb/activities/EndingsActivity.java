@@ -1,7 +1,5 @@
 package com.example.stopthebomb.activities;
 
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +8,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,7 +23,7 @@ import android.os.Looper;
 
 import java.util.List;
 
-public class EndingsActivity extends AppCompatActivity {
+public class EndingsActivity extends BaseActivity {
     private RecyclerView recyclerView;
     private EndingsAdapter adapter;
     private TextView discoveredCountTextView;
@@ -77,7 +74,7 @@ public class EndingsActivity extends AppCompatActivity {
             uiHandler.post(() -> {
                 adapter = new EndingsAdapter(endings);
                 recyclerView.setAdapter(adapter);
-                discoveredCountTextView.setText("Discovered: " + finalDiscoveredCount + "/" + endings.size());
+                discoveredCountTextView.setText(getString(R.string.discovered)+ ": " + finalDiscoveredCount + "/" + endings.size());
             });
         });
     }
@@ -107,7 +104,7 @@ public class EndingsActivity extends AppCompatActivity {
             if (ending.discovered) {
                 holder.nameTextView.setText(ending.name);
                 holder.descriptionTextView.setText(ending.description);
-                holder.dateTextView.setText("Discovered: " + ending.discoveredDate);
+                holder.dateTextView.setText(getString(R.string.discovered)+ ": " + ending.discoveredDate);
 
                 // Set the image from drawable resources
                 if (ending.imageResource != null && !ending.imageResource.isEmpty()) {
@@ -122,7 +119,7 @@ public class EndingsActivity extends AppCompatActivity {
             } else {
                 // Show placeholder for undiscovered endings
                 holder.nameTextView.setText("????");
-                holder.descriptionTextView.setText("This ending hasn't been discovered yet");
+                holder.descriptionTextView.setText(getString(R.string.ending_not));
                 holder.dateTextView.setText("");
                 holder.lockedOverlayView.setVisibility(View.VISIBLE);
             }

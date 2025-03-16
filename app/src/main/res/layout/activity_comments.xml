@@ -12,7 +12,7 @@
         android:id="@+id/title_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Comments"
+        android:text="@string/comments"
         android:textSize="24sp"
         android:textStyle="bold"
         android:gravity="center"
@@ -43,7 +43,7 @@
                 android:id="@+id/author_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Your Name"
+                android:hint="@string/name_label"
                 android:inputType="textPersonName"
                 android:layout_marginBottom="8dp" />
 
@@ -51,7 +51,7 @@
                 android:id="@+id/comment_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Write a comment..."
+                android:hint="@string/write_comm"
                 android:inputType="textMultiLine"
                 android:minLines="3"
                 android:gravity="top|start"
@@ -67,7 +67,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Cancel"
+                    android:text="@string/cancel"
                     android:layout_marginEnd="8dp" />
 
                 <Button
@@ -75,7 +75,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Add Comment" />
+                    android:text="@string/add_comment" />
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
@@ -90,7 +90,7 @@
         android:id="@+id/btnBackToMain"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Back"
+        android:text="@string/back"
         android:layout_marginTop="16dp" />
 
 </LinearLayout>

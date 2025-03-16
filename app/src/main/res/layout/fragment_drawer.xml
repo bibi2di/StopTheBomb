@@ -23,21 +23,21 @@
             android:id="@+id/btnIdCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="ID Card" />
+            android:text="@string/id_card" />
 
 
         <Button
             android:id="@+id/btnPlans"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Plans"
+            android:text="@string/plans"
             android:layout_marginTop="16dp" />
 
         <Button
             android:id="@+id/btnClose"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cerrar"
+            android:text="@string/back"
             android:layout_gravity="end"
             android:layout_margin="16dp" />
 

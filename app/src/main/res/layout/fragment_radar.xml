@@ -23,14 +23,14 @@
             android:id="@+id/btnLocalizacion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Abrir Localización" />
+            android:text="@string/open_loc" />
 
         <!-- EditText para introducir el destino personalizado -->
         <EditText
             android:id="@+id/editDestino"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Introduce una dirección"
+            android:hint="@string/intro_dest"
             android:inputType="text" />
 
         <!-- Botón para abrir la ubicación personalizada -->
@@ -38,13 +38,13 @@
             android:id="@+id/btnEstablecerDestino"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Establecer Destino" />
+            android:text="@string/establish_dest" />
 
         <Button
             android:id="@+id/btnClose"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cerrar"
+            android:text="@string/back"
             android:layout_gravity="end"
             android:layout_margin="16dp" />
     </LinearLayout>
